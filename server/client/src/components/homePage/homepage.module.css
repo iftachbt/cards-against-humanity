@@ -1,0 +1,25 @@
+.background{
+    background-size: cover;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    z-index: -1;
+    top: 0;
+}
+.h1{
+    color: rgb(0 0 0 / 82%);
+    font-size: 4em;
+    position: relative;
+    margin: 0 auto;
+    top: 4rem;
+    width: fit-content;
+}
+.buttonContainer{
+    display: flex;
+    width: 55%;
+    margin: 0 auto;
+    position: relative;
+    top: 8rem;
+    justify-content: space-around;
+}
+

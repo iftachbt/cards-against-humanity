@@ -1,0 +1,23 @@
+{
+  "type": "module",
+  "scripts": {
+    "test": "vitest --run --reporter verbose",
+    "watch": "vitest --reporter verbose",
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "body-parser": "^1.20.0",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "express-mysql-session": "^2.1.8",
+    "express-session": "^1.17.3",
+    "passport": "^0.6.0",
+    "passport-local": "^1.0.0",
+    "uuid": "^8.3.2",
+    "vitest": "^0.21.1",
+    "yup": "^0.32.11"
+  }
+}

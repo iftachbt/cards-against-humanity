@@ -1,0 +1,44 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/server/node_modules
+/server/.pnp
+/server/.pnp.js
+
+/server/client/node_modules
+/server/client/.pnp
+/server/client/.pnp.js
+/server/client/.eslintrc.json
+
+
+# testing
+/server/coverage
+
+/server/client/coverage
+
+# production
+/server//build
+
+/server/client/build
+
+# misc
+/server/.DS_Store
+/server/.env.local
+/server/.env.development.local
+/server/.env.test.local
+/server/.env.production.local
+/server/.env
+
+/server/client/.DS_Store
+/server/client/.env.local
+/server/client/.env.development.local
+/server/client/.env.test.local
+/server/client/.env.production.local
+/server/client/.env
+
+npm-debug.log*
+/server/yarn-debug.log*
+/server/yarn-error.log*
+
+/server/client/yarn-debug.log*
+/server/client/yarn-error.log*
