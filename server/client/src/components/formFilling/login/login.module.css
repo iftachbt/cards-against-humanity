@@ -22,3 +22,7 @@
   height: 50%;
   margin: 0 auto;
 }
+p a{
+  color: rgb(17, 146, 238);
+  cursor: pointer;
+}

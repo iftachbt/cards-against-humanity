@@ -16,27 +16,23 @@ import { useNavigate } from "react-router-dom";
 import { logout } from "../../actions/user";
 import { appBarTheme } from "./header.style";
 import { ThemeProvider } from '@mui/material/styles';
-import {VolumeUp,VolumeOff} from '@mui/icons-material';
 
 
 const Header = (props) => {
+  const {user,setUser} =props
   const navigate = useNavigate();
   const [anchorElNav, setAnchorElNav] = useState(null)
   const [anchorElUser, setAnchorElUser] = useState(null);
 
+  useEffect(()=>console.log("header"))
+
   let pages = [];
-  if(props.location === "mainGame"){
-    pages.push("save","menu")
-  }
+  
   function handlePageClick(event){
     const val = event.target.getAttribute('value')
-    if(val === "save") props.setPushSave(true)
-    if(val === "menu") navigate("/choosePage")
+    if(val === "menu") navigate("/")
     handleOpenNavMenu(event)
   };
-  const handleMute = () =>{
-    props.setMute(!props.isMute)
-}
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -53,8 +49,8 @@ const Header = (props) => {
   };
   function logoutHandler(){
     logout()
-    props.setUser(null)
-    navigate('/')
+    setUser(null)
+    // navigate('/')
 }
 
   return (
@@ -114,17 +110,10 @@ const Header = (props) => {
                   <Typography  onClick={handlePageClick} value={page} textAlign="center">{page}</Typography>
                 </MenuItem>
               ))}
-              <IconButton
-                aria-label="toggle background audio"
-                onClick={handleMute}
-                onMouseDown={handleMute}
-              >
-                {!props.isMute ? <VolumeUp /> : <VolumeOff />}
-              </IconButton>
             </Menu>
           </Box>
           <Typography
-            variant="h5"
+            variant="h6"
             noWrap
             component="a"
             onClick={() => navigate('/')}
@@ -139,7 +128,7 @@ const Header = (props) => {
               textDecoration: 'none',
             }}
           >
-            HOME
+            HOME1
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
@@ -152,17 +141,9 @@ const Header = (props) => {
                 {page}
               </Button>
             ))}
-            <IconButton
-                aria-label="toggle background audio"
-                onClick={handleMute}
-                onMouseDown={handleMute}
-              >
-                {!props.isMute ? <VolumeUp /> : <VolumeOff />}
-              </IconButton>
           </Box>
-
-          {props.user ?(<Box sx={{ flexGrow: 0 }}>
-              <Button onClick={handleOpenUserMenu} sx={{ p: 1 }} color="inherit">{props.user.username}</Button>
+          {user ?(<Box sx={{ flexGrow: 0 }}>
+              <Button onClick={handleOpenUserMenu} sx={{ p: 1 }} color="inherit">{user.userName}</Button>
             <Menu
               sx={{ mt: '45px' }}
               id="menu-appbar"

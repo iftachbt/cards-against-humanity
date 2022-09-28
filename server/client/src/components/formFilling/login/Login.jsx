@@ -17,8 +17,9 @@ function LogIn(props){
   const handleMouseDownPassword = () => setShowPassword(!showPassword);
 
   const navigate = useNavigate();
+  useEffect(()=>console.log("login"))
 
-  useEffect(() => {if(props.user) navigate("/choosePage")})
+  useEffect(() => {if(props.user) navigate("/")})
 
   async function handleClick(values){
       const res = await logIn(values)
@@ -77,6 +78,8 @@ function LogIn(props){
               </Grid>
             </Form>
           </Formik>
+          <p>still not signIn?</p>
+          <p>register <a onClick={() => navigate('/signup')}>here</a></p>
         </div>
         </div>
       </div>

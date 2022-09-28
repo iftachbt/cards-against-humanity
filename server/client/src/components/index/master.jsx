@@ -1,3 +1,4 @@
+import "./master.css"
 import React, { useState,useEffect } from "react";
 import { fetchUser } from "../../actions/user";
 import {
@@ -9,31 +10,17 @@ import Header from "../header/header";
 import SignUp from "../formFilling/signup/signup";
 import LogIn from "../formFilling/login/Login";
 import HomePage from "../homePage/homePage";
-import "./master.css"
+import JoinGame from "../joinGame/joinGame";
+import CreateGame from "../createGame/createGame";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { updateSession } from "../../actions/gameSession/gameSession";
-import { errToster, toster } from "../../actions/toastAlert";
 
 
 
 function Master(){
   const [user, setUser] = useState(false)
-  const [character, setCharacter] = useState(false)
-  const [characterSession,setCharacterSession] = useState(false)
-  const [location, setLocation] = useState(false)
-  const [headerState, setHeaderState] = useState(false)
-  const [isMute,setMute] = useState(true)
-  const [countOnce,setCountOnce] = useState(0)
-  const [pushSave,setPushSave] = useState(false)
 
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if(location !== "mainGame") {
-      setHeaderState(false)
-    }
-  },[location])
 
   useEffect(() => {
     fetchUserHandler()  
@@ -58,9 +45,6 @@ function Master(){
         <Header 
           user={user} 
           setUser={setUser} 
-          setHeaderState={setHeaderState}
-          setMute={setMute}
-          setPushSave={setPushSave}
         />
         <Routes>
             <Route exact path="/" element={
@@ -74,8 +58,18 @@ function Master(){
               setUser ={setUser} 
               user ={user} />}
              />
-            <Route path="/sigup" element={
+            <Route path="/signup" element={
             <SignUp 
+              setUser ={setUser}
+              user ={user}/>}
+             />
+            <Route path="/joinGame" element={
+            <JoinGame 
+              setUser ={setUser}
+              user ={user}/>}
+             />
+            <Route path="/createGame" element={
+            <CreateGame 
               setUser ={setUser}
               user ={user}/>}
              />
