@@ -6,15 +6,18 @@ import cors from "cors";
 import session from "express-session";
 import passport from "passport";
 import cookieParser from "cookie-parser";
+import http from "http";
 import { passportInitialize } from "./routes/users/users.auth.js";
 import { connectRoutes } from "./routes/index.routes.js";
 import { sessionConfig } from "./routes/users/users.auth.js";
 import { corsOptions } from "./cors.service.js";
 import { fileURLToPath } from "url";
+import { connectSocket } from "./socket/socket.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const app = express();
+const server = http.createServer(app);
 
 passportInitialize(passport);
 app.use(express.static("public"));
@@ -33,5 +36,6 @@ if (process.env.ENV === "PROD") {
 const port = process.env.PORT || 4000;
 
 connectRoutes(app);
+connectSocket(server);
 
-export const server = app.listen(port, () => console.log(`Listening on port ${port}`));
+server.listen(port, () => console.log(`Listening on port ${port}`));
