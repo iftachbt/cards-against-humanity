@@ -14,12 +14,15 @@ import JoinGame from "../joinGame/joinGame";
 import CreateGame from "../createGame/createGame";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { connectSocket } from "../../actions/socketHandle";
 
 
 
 function Master(){
   const [user, setUser] = useState(false)
 
+  // connectSocket()
+  
   const navigate = useNavigate();
 
   useEffect(() => {

@@ -1,12 +1,24 @@
-import socket from "socket.io";
-import { server } from "../index.js";
+import { Server } from "socket.io";
+// import { server } from "../index.js";
 
-const io = new socket.Server(server);
+export function connectSocket(server) {
+  const io = new Server(server);
 
-io.on("connection", function (socket) {
-  console.log("A new socket has joined: " + socket.id);
+  console.log("got to socket");
+  // setInterval(function () {
+  const msg = Math.random();
+  io.emit("message", msg);
+  console.log(msg);
+  // }, 11000);
 
-  socket.on("hello", function (data) {
-    console.log(data);
+  io.on("connection", function (socket) {
+    socket.on("hello", (arg) => {
+      console.log(arg); // world
+    });
+    console.log("A new socket has joined: " + socket.id);
+
+    socket.on("hello", function (data) {
+      console.log(data);
+    });
   });
-});
+}
