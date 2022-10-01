@@ -2,6 +2,7 @@ import React ,{ useEffect }from "react";
 import style from "./homepage.module.css"
 import {useNavigate} from "react-router-dom";
 import 'react-confirm-alert/src/react-confirm-alert.css'; 
+import { createSession } from "../../actions/gameSession/gameSession";
 
 function HomePage(props){
   const {user} = props
@@ -11,10 +12,11 @@ function HomePage(props){
     !user && navigate('/login')
   })
   useEffect(()=>console.log("homepage"))
+  console.log(window.location.pathname);
 
-
-  function handleClick(navi){
-    navigate('/'+ navi)
+  const handleClick = async(navi) =>{
+    const res = await createSession({name: "avav"})
+    navigate('/game/'+res)
   }
 
   return(

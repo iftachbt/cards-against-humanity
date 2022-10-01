@@ -3,12 +3,12 @@ import axios from "axios";
 const URL = process.env.REACT_APP_SERVER;
 
 export async function sendPost(route, body) {
+  console.log("route", route);
   try {
     const res = await axios.post(URL + route, body, {
       headers: { "Content-Type": "application/json" },
       withCredentials: true,
     });
-
     return res.data;
   } catch (err) {
     console.log(err);

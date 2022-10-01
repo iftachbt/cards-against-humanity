@@ -11,18 +11,21 @@ import SignUp from "../formFilling/signup/signup";
 import LogIn from "../formFilling/login/Login";
 import HomePage from "../homePage/homePage";
 import JoinGame from "../joinGame/joinGame";
+import MainGame from "../mainGame/mainGame";
 import CreateGame from "../createGame/createGame";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { connectSocket } from "../../actions/socketHandle";
+import { connectSocket, effectSocket } from "../../actions/socketHandle";
 
 
 
 function Master(){
   const [user, setUser] = useState(false)
 
-  // connectSocket()
-  
+  const handle = () => connectSocket()
+  useEffect(() =>{
+    effectSocket()
+  },[])
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -44,6 +47,7 @@ function Master(){
     
   return(
     <div>
+      <div onClick={handle}>btn</div>
         <ToastContainer />
         <Header 
           user={user} 
@@ -52,6 +56,12 @@ function Master(){
         <Routes>
             <Route exact path="/" element={
             <HomePage 
+              setUser ={setUser}
+              user ={user}
+              />}
+             />
+            <Route exact path="/game/:sessionCode" element={
+            <MainGame 
               setUser ={setUser}
               user ={user}
               />}

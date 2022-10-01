@@ -11,7 +11,6 @@ import { errToster,toster} from '../../../actions/toastAlert';
 import { validationSchema } from "./signup.validate";
 
 function SignUp(props){
-  useEffect(()=>console.log("signup"))
 
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword(!showPassword);

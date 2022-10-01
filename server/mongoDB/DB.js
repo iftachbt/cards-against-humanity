@@ -13,14 +13,10 @@ export const runQuery = (query, values) => {
   return new Promise((resolve) => {
     const connection = mysql.createConnection(options);
     connection.connect(function (err) {
-      if (err) throw err;
+      if (err) console.log("err", err.code);
       connection.query(query, values, function (err, result) {
-        try {
-          if (err) throw err;
-          resolve(result);
-        } catch (err) {
-          resolve(err.code);
-        }
+        if (err) console.log("err", err.code);
+        resolve(err ? err.code : result);
       });
     });
   });

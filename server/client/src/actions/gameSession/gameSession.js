@@ -1,7 +1,7 @@
 import { sendGet, sendPost, sendDelete, sendUpdate } from "../apiHandle";
 
-export async function fetchSessionById(characterId) {
-  return await sendGet("game/session?characterId=" + characterId);
+export async function fetchSessionByCode(code) {
+  return await sendGet("game/session?code=" + code);
 }
 
 export async function createSession(info) {
