@@ -1,0 +1,63 @@
+
+.header{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.messageCon{
+  background-color: #ccd8f2 !important;
+  margin: 7px auto 4px auto;
+  height: 82%;
+  width: 96%;
+  border-radius: 8px;
+  overflow: auto;
+}
+.msg{
+  border-radius: 8px;
+  width: 100%;
+  display: flex;
+  width: 92%;
+  margin: 10px auto;
+
+}
+.msg div{
+  border-radius: 8px;
+  margin: 3px;
+  padding: 2px 4px;
+  max-width: 95%;
+  word-wrap: break-word;
+  direction: rtl;
+}
+.self{
+  flex-direction: row-reverse;
+  text-align: right;
+}
+.self div{
+  background-color: #d9fdd3 !important;
+}
+.players{
+  flex-direction: row;
+  text-align: left;
+}
+.players div{
+  background-color: #fff !important;
+}
+.textCon{
+  margin: 11px auto 0 3px;
+  width: 96%;
+  height: 6%;
+  display: flex;
+  justify-content: space-around;
+  flex-direction: row;
+}
+.textCon button{
+  width: 6vh;
+  height: 6vh;
+}
+.textField{
+
+}
+.nameTag{
+  text-decoration: underline;
+  font-weight: bold;
+}

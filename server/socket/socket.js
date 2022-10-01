@@ -1,24 +1,28 @@
 import { Server } from "socket.io";
-// import { server } from "../index.js";
 
 export function connectSocket(server) {
-  const io = new Server(server);
+  const io = new Server(server, {
+    cors: {
+      origin: process.env.CLIENT_URL,
+      methods: ["GET", "POST"],
+    },
+  });
 
-  console.log("got to socket");
-  // setInterval(function () {
-  const msg = Math.random();
-  io.emit("message", msg);
-  console.log(msg);
-  // }, 11000);
+  io.on("connection", (socket) => {
+    socket.join(socket.request._query["session_id"]);
 
-  io.on("connection", function (socket) {
-    socket.on("hello", (arg) => {
-      console.log(arg); // world
+    socket.on("session", (data) => {
+      if (data.type === "getChat") {
+        socket.emit("session", { type: "chatList", msg: "ENTER HERE CHAT LIST" });
+      }
+      if (data.type === "chat") {
+        socket.emit("session", { type: "chatList", msg: "ENTER HERE CHAT LIST" });
+        socket.broadcast.emit("session", { type: "chatList", msg: "ENTER HERE CHAT LIST" });
+      }
     });
-    console.log("A new socket has joined: " + socket.id);
+  });
 
-    socket.on("hello", function (data) {
-      console.log(data);
-    });
+  io.on("disconnect", (socket) => {
+    socket.leave(socket.request._query["session_id"]);
   });
 }
