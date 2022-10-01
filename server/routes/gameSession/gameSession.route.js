@@ -11,7 +11,9 @@ GameSessionRoute.post("/session", async (req, res) => {
 GameSessionRoute.put("/session", (req, res) => {});
 GameSessionRoute.get("/session", async (req, res) => {
   const session = await fetchSession(req.query.code);
-  res.send(session);
+  console.log("session", session);
+  const cards = await fetchPlayerCards(req.query.code, req.user.id);
+  res.send({ session, cards });
 });
 GameSessionRoute.get("/session/player/cards", async (req, res) => {
   const session = await fetchPlayerCards(req.query.code, req.user.id);

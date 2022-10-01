@@ -15,14 +15,12 @@ function Chat(props){
 
   socket.on("session", (data) => {
     if(data.type === "chatList"){
-      console.log(data);
       setMessagesArray(data.msg)
     }
   })
 
   useEffect(() => {
     if(!session?.id)return
-    console.log(session);
     socket.emit("session", { type:"getChat",  sessionId: session.id });
   },[session])
 

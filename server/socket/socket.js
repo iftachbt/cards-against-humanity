@@ -10,7 +10,6 @@ export function connectSocket(server) {
   });
 
   io.on("connection", (socket) => {
-    console.log("????");
     socket.join(socket.request._query["session_id"]);
 
     socket.on("session", async (data) => {
