@@ -8,24 +8,27 @@ import Chat from "./chat/chat";
 function MainGame(props){
   const URL = process.env.REACT_APP_SERVER;
   const {user} = props
-  const [session,setSession] = useState([{code:null}])
+  const [session,setSession] = useState()
   const {sessionCode} = useParams()
   let socket = io.connect(URL, { query: "session_id="+sessionCode});
   
   useEffect(() => {
     getSessionHandler()
-  },[])
+  },[sessionCode])
+
   const getSessionHandler = async() =>{
-    if(!session.code){
+    if(!session?.id){
       const res = await fetchSessionByCode(sessionCode)
+      console.log("res",res);
       setSession(res)
     }
   }
+
   return(
     <div >
-      <h1>{session[0].code ?session[0].code :"try again"}</h1>
+      <h1>{session?.id || "try again"}</h1>
       <Chat
-      session={session[0]}
+      session={session}
       user={user}
       socket={socket}
        />

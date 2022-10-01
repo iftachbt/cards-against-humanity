@@ -1,4 +1,5 @@
 import { Server } from "socket.io";
+import { addMsg, getChatBySessionId } from "../routes/chat/chat.service.js";
 
 export function connectSocket(server) {
   const io = new Server(server, {
@@ -9,15 +10,19 @@ export function connectSocket(server) {
   });
 
   io.on("connection", (socket) => {
+    console.log("????");
     socket.join(socket.request._query["session_id"]);
 
-    socket.on("session", (data) => {
+    socket.on("session", async (data) => {
+      console.log("data", data);
       if (data.type === "getChat") {
-        socket.emit("session", { type: "chatList", msg: "ENTER HERE CHAT LIST" });
+        const chatList = await getChatBySessionId(data.sessionId);
+        socket.emit("session", { type: "chatList", msg: chatList });
       }
       if (data.type === "chat") {
-        socket.emit("session", { type: "chatList", msg: "ENTER HERE CHAT LIST" });
-        socket.broadcast.emit("session", { type: "chatList", msg: "ENTER HERE CHAT LIST" });
+        const chatList = await addMsg(data.userId, data.sessionId, data.msg);
+        socket.emit("session", { type: "chatList", msg: chatList });
+        socket.broadcast.emit("session", { type: "chatList", msg: chatList });
       }
     });
   });

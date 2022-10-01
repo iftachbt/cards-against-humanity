@@ -12,6 +12,19 @@
   border-radius: 8px;
   overflow: auto;
 }
+.messageCon::-webkit-scrollbar {
+  width: 9px;
+}
+
+.messageCon::-webkit-scrollbar-track {
+  background: #ccd8f2;
+}
+
+.messageCon::-webkit-scrollbar-thumb {
+  background-color: #6b717e;
+  border-radius: 10px;
+  border: 3px solid #ccd8f2;
+}
 .msg{
   border-radius: 8px;
   width: 100%;
@@ -25,6 +38,7 @@
   margin: 3px;
   padding: 2px 4px;
   max-width: 95%;
+  min-width: 80px;
   word-wrap: break-word;
   direction: rtl;
 }

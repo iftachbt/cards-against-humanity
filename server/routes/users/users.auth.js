@@ -28,13 +28,10 @@ export function sessionConfig() {
 }
 export const passportInitialize = (passport) => {
   passport.serializeUser(function (user, done) {
-    console.log("got serializeUser");
     done(null, user.id);
   });
 
   passport.deserializeUser(async (id, done) => {
-    console.log("got deserializeUser");
-    console.log(id);
     const res = await getUserById(id);
     if (!res[0]) return done(null, false);
     return done(null, res[0]);

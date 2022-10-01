@@ -11,18 +11,20 @@ function Chat(props){
   const drawerWidth = 240
   const [open,setOpen]=useState(false)
   const [message,setMessage]=useState("")
-  const [messagesArray,setMessagesArray]=useState([
-    {name:"dave",id: user.id,text:"asds",time:1664418112},
-    {name:"bonny",id: 123456,text:"xcvfdgsssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssxcvxcv",time:1664417032}])
+  const [messagesArray,setMessagesArray]=useState([])
 
   socket.on("session", (data) => {
-    if(data.type === "chatList")
+    if(data.type === "chatList"){
+      console.log(data);
       setMessagesArray(data.msg)
+    }
   })
 
   useEffect(() => {
-    socket.emit("session", { type:"getChat" ,msg: "" });
-  },[])
+    if(!session?.id)return
+    console.log(session);
+    socket.emit("session", { type:"getChat",  sessionId: session.id });
+  },[session])
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -34,9 +36,14 @@ function Chat(props){
 
   const handleSendMessage = () => {
     console.log(message);
-    socket.emit("session", { type:"chat" ,msg: message });
+    socket.emit("session", {type:"chat" ,msg: message ,userId: user.id, sessionId: session.id });
     setMessage("")
   };
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      handleSendMessage()
+    }
+  }
   return(
     <div >
       <IconButton
@@ -68,23 +75,23 @@ function Chat(props){
       </div>
         <Divider />
         <div className={style.messageCon}>
-          {messagesArray.map((msg) => {
-            const msgStyle = [style.msg,msg.id===user.id ?style.self :style.players].join(" ")
+          {messagesArray.map((chat) => {
+            const msgStyle = [style.msg,chat.player_id===user.id ?style.self :style.players].join(" ")
           return (
-            <div className={msgStyle}>
+            <div className={msgStyle} key={`${chat.msg_id}`}>
               <div>
-                <span  className={style.nameTag}>bax banny</span>
+                <span  className={style.nameTag}>{chat.player_id===user.id ?"me":chat.userName}</span>
                 <Typography paragraph>
-                  {msg.text}
+                  {chat.msg}
                 </Typography>
-                <span>{moment.unix(msg.time).format("HH:mm")}</span>
+                <span>{moment(chat.ts).format("HH:mm")}</span>
               </div>
             </div>
           )
           })}
         </div>
       <div className={style.textCon} >
-        <input className={style.textField} value={message} onChange={(e) =>setMessage(e.target.value)}/>
+        <input onKeyDown={handleKeyDown} className={style.textField} value={message} onChange={(e) =>setMessage(e.target.value)}/>
         <IconButton onClick={handleSendMessage}>
           <Send />
         </IconButton>

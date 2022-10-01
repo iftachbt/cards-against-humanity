@@ -1,19 +1,28 @@
 import { runQuery } from "../../mongoDB/DB.js";
 
-export const insert = (user) => {
-  const query = "INSERT INTO cards_db.game_session(host_id,name,code,id) values (?,?,?,?)";
-  console.log("insert", ...user);
-  return runQuery(query, [...user]);
+export const insert = (session) => {
+  const query = "INSERT INTO cards_db.game_session(host_id,name,id) values (?,?,?)";
+  return runQuery(query, [session.hostId, session.name, session.id]);
 };
-export const getSessionByCode = (code) => {
-  const query = "SELECT id,code,name FROM cards_db.game_session WHERE code = ?";
-  return runQuery(query, [code]);
+
+export const getSessionById = (id) => {
+  const query = "SELECT id,name FROM cards_db.game_session WHERE id = ?";
+  console.log(id);
+  return runQuery(query, [id]);
 };
-// export const getPassByEmail = (email) => {
-//   const query = "SELECT password FROM cards_db.game_session WHERE email = ?";
-//   return runQuery(query, [email]);
-// };
-// export const getUserById = (userId) => {
-//   const query = "SELECT userName,email,id FROM cards_db.game_session WHERE id = ?";
-//   return runQuery(query, [userId]);
-// };
+
+export const addCardToPlayer = (userId, sessionId, cardId) => {
+  const query = "INSERT INTO cards_db.game_session_cards(session_id,player_id,card_id) values (?,?,?)";
+  return runQuery(query, [sessionId, userId, cardId]);
+};
+
+export const getPlayerCards = (sessionId, userId) => {
+  const query = "SELECT * FROM cards_db.game_session_cards WHERE session_id = ? and player_id = ?";
+  return runQuery(query, [sessionId, userId]);
+};
+
+export const getFilterdSessionCards = (sessionId, color) => {
+  const query =
+    "select * from cards_db.cards where color = '?' and id not in (SELECT card_id FROM cards_db.game_session_cards WHERE session_id = ?) ";
+  return runQuery(query, [color, sessionId]);
+};
