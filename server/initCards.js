@@ -1239,13 +1239,15 @@ const run = async () => {
       return `("white","${text}")`;
     })
     .join(",");
-  await insertCard(whiteValus);
-
   const blackValus = blackList
+    .filter((text) => {
+      if (text.split("_____").length > 2) return;
+      return text;
+    })
     .map((text) => {
       return `("black","${text}")`;
     })
     .join(",");
-  await insertCard(blackValus);
+  await insertCard(blackValus + "," + whiteValus);
 };
 run();

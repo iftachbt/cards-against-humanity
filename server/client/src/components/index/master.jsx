@@ -15,17 +15,10 @@ import MainGame from "../mainGame/mainGame";
 import CreateGame from "../createGame/createGame";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { connectSocket, effectSocket } from "../../actions/socketHandle";
-
-
 
 function Master(){
   const [user, setUser] = useState(false)
 
-  const handle = () => connectSocket()
-  useEffect(() =>{
-    effectSocket()
-  },[])
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -47,7 +40,6 @@ function Master(){
     
   return(
     <div>
-      <div onClick={handle}>btn</div>
         <ToastContainer />
         <Header 
           user={user} 
