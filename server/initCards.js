@@ -1240,6 +1240,10 @@ const run = async () => {
     })
     .join(",");
   const blackValus = blackList
+    .filter((text) => {
+      if (text.split("_____").length > 2) return;
+      return text;
+    })
     .map((text) => {
       return `("black","${text}")`;
     })

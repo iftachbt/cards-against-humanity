@@ -15,7 +15,7 @@ function HomePage(props){
   console.log(window.location.pathname);
 
   const handleClick = async(navi) =>{
-    const res = await createSession({name: "avav"})
+    const res = await createSession()
     navigate('/game/'+res)
   }
 
