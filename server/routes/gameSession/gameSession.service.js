@@ -2,6 +2,7 @@ import randomize from "randomatic";
 import {
   addCardToPlayer,
   blackCardId,
+  discardPlayedCards,
   getFilterdSessionCards,
   getplayedCards,
   getPlayerCards,
@@ -23,8 +24,9 @@ export const createSession = async (userId) => {
 export const fetchSession = async (id) => {
   const sessionsList = await getSessionById(id);
   const session = sessionsList[0];
-  session.turn = (await getPlayerList(id))[session.turn]?.player_id || 0;
-  return sessionsList[0];
+  const playersList = await getPlayerList(id);
+  session.turn = playersList[session.turn]?.player_id || 0;
+  return { session, playersList };
 };
 export const fetchBlackCard = async (id) => {
   const card = await getSessionBlackCard(id);
@@ -50,9 +52,7 @@ export const changeCardStatus = async (status, sessionId, cardId) => {
 export const isRoundDone = async (sessionId) => {
   const players = await getPlayerList(sessionId);
   const playedCards = await getplayedCards(sessionId);
-  console.log("isRoundDone?", players, playedCards);
-  if (players.length - 1 === playedCards.length) return playedCards;
-  console.log("isRoundDone no!", players.length - 1, playedCards.length);
+  if (players.length - 1 <= playedCards.length) return playedCards;
   return false;
 };
 
@@ -60,6 +60,7 @@ export const drawCard = async (sessionId, color) => {
   const cardsList = await getFilterdSessionCards(sessionId, color);
   return cardsList[Math.floor(Math.random() * cardsList.length)];
 };
+export const discardPlayedCardsHandler = (sessionId) => discardPlayedCards(sessionId);
 
 const randomName = () =>
   uniqueNamesGenerator({

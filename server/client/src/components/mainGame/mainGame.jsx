@@ -10,18 +10,34 @@ function MainGame(props){
   const URL = process.env.REACT_APP_SERVER;
   const {user} = props
   const [session,setSession] = useState()
+  const [playersStatus,setPlayersStatus] = useState([])
+  const [playersList,setPlayersList] = useState([])
   const [judgeTurn,setJudgeTurn] = useState(false)
   const [cards,setCards] = useState([])
+  const [selectedCards,setSelectedCard] = useState([])
   const [choosedCard,setChoosedCard] = useState(null)
   const [blackCard,setBlackCard] = useState()
   const {sessionCode} = useParams()
   let socket = io.connect(URL, { query: "session_id="+sessionCode});
-console.log(session?.turn);
   useEffect(() => {
     getSessionHandler()
   },[sessionCode])
 
   socket.on("session", (data) => {
+    if(data.type === "update"){
+      if(data.session){
+        setSession(data.session)
+      }
+      if(data.cards){
+        updateCards(data.cards)
+      }
+      if(data.status){
+        setPlayersStatus(data.status)
+        if(data.status.filter(s => s.status !== "play").length === 1)
+          setJudgeTurn(true)
+      }
+      if(data.winner){}
+    }
     if(data.type === "endRound"){
       setJudgeTurn(true)
       console.log("newcards",data.cards);
@@ -43,17 +59,20 @@ console.log(session?.turn);
   })
   const getSessionHandler = async() =>{
     if(!session?.id){
-      const {session,cards,blackCard} = await fetchSessionByCode(sessionCode)
-      const selectedCard = cards.filter(c => c.status === "play")
-      if(selectedCard.length){
-        setChoosedCard(selectedCard)
-      }
-      setCards(cards);
+      const {session,cards,blackCard,playersList} = await fetchSessionByCode(sessionCode)
+      updateCards(cards)
       setSession(session)
       setBlackCard(blackCard)
+      setPlayersList(...playersList)
     }
   }
-
+  const updateCards = (cards) =>{
+    const selectedCard = cards.filter(c => c.status === "play")
+    if(selectedCard.length){
+      setChoosedCard(selectedCard)
+    }
+    setCards(cards);
+  }
   const handleClick = (index) =>{
     if(choosedCard && choosedCard.status === "play") return
     setChoosedCard(cards[index]);
@@ -115,7 +134,6 @@ console.log(session?.turn);
       <div className={style.cardsCon}>
         <div className={style.box}>
           {cards.map((card,index)=> {
-            console.log(card);
             if(choosedCard && card.id === choosedCard.id) return
             return(
             <div 

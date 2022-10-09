@@ -1,0 +1,49 @@
+.con{
+  background-color: #94bbc7;
+  color: gainsboro;
+  width: 20vw;
+  height: 62vh;
+  position: absolute;
+  right: 36vw;
+  z-index: 10;
+  padding: 17px 0;
+  border-radius: 10px;
+  text-align: center;
+}
+.CopyBtn {
+  background-image: -webkit-linear-gradient(top, #D8D8D8, #666767);
+  border-radius: 10px;
+  color: #FFFFFF;
+  position: relative;
+  top: 3vh;
+  font-family: Georgia;
+  font-size: 1vw;
+  width: 29%;
+  padding: 8px;
+  text-decoration: none;
+  display: inline-block;
+}
+.CopyBtn:hover {
+  background-image: -webkit-linear-gradient(top, #545454, #6F6F6F);
+  text-decoration: none;
+}
+.URLdiplay{
+  background-color: #767672;
+  padding: 13px 0;
+  width: 100%;
+}
+.URLCon{
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 18px;
+}
+.copy{
+  border-top: solid black 1px;
+  cursor: pointer;
+}
+.codeCon{
+  margin-bottom: 18px;
+}
+.ORDisplay{
+  margin: 16px;
+}

@@ -1,0 +1,116 @@
+.con{
+  background-color: #94bbc7;
+  color: gainsboro;
+  width: 20vw;
+  height: 62vh;
+  position: absolute;
+  right: 36vw;
+  z-index: 10;
+  padding: 17px;
+  border-radius: 10px;
+  text-align: center;
+}
+.CopyBtn {
+  background-image: -webkit-linear-gradient(top, #D8D8D8, #666767);
+  border-radius: 10px;
+  color: #FFFFFF;
+  position: relative;
+  top: 3vh;
+  font-family: Georgia;
+  font-size: 1vw;
+  width: 29%;
+  padding: 8px;
+  text-decoration: none;
+  display: inline-block;
+}
+.CopyBtn:hover {
+  background-image: -webkit-linear-gradient(top, #545454, #6F6F6F);
+  text-decoration: none;
+}
+.URLdiplay{
+  background-color: #767672;
+  padding: 13px 0;
+  width: 100%;
+}
+.URLCon{
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 18px;
+}
+.copy{
+  border-top: solid black 1px;
+  cursor: pointer;
+}
+.codeCon{
+  margin-bottom: 18px;
+}
+.ORDisplay{
+  margin: 16px;
+}
+.otc {
+	position: relative;
+	width: 320px;
+	margin: 0 auto;
+}
+
+.otc fieldset {
+	border: 0;
+	padding: 0;
+	margin: 0;
+}
+
+.otc fieldset div {
+	display: flex;
+	align-items: center;
+}
+
+.otc legend {
+	margin: 0 auto 1em;
+	color: #5555FF;
+}
+
+.input[type="number"] {
+	width: .82em;
+	line-height: 1;
+	margin: .1em;
+	padding: 8px 0 4px;
+	font-size: 2.65em;
+	text-align: center;
+	appearance: textfield;
+	-webkit-appearance: textfield;
+	border: 2px solid #BBBBFF;
+	color: purple;
+	border-radius: 4px;
+}
+
+.input::-webkit-outer-spin-button,
+.input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.input[type="number"]:nth-child(n+4) {
+	order: 2;
+}
+.otc div::before {
+	content: '';
+	height: 2px;
+	width: 24px;
+	margin: 0 .25em;
+	order: 1;
+	background: #BBBBFF;
+}
+
+.otc label {
+	border: 0 !important;
+	clip: rect(1px, 1px, 1px, 1px) !important;
+	-webkit-clip-path: inset(50%) !important;
+	clip-path: inset(50%) !important;
+	height: 1px !important;
+	margin: -1px !important;
+	overflow: hidden !important;
+	padding: 0 !important;
+	position: absolute !important;
+	width: 1px !important;
+	white-space: nowrap !important;
+}
