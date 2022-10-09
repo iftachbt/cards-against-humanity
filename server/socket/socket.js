@@ -14,7 +14,6 @@ export function connectSocket(server) {
   io.on("connection", (socket) => {
     socket.join(socket.request._query["session_id"]);
     socket.on("session", async (data) => {
-      console.log("socket.on", data);
       handleChat(socket, data);
       handleGameEngine(socket, data);
     });
@@ -30,18 +29,13 @@ const handleGameEngine = async (socket, data) => {
     await changeCardStatus("play", data.sessionId, data.cardId);
     const cards = await isRoundDone(data.sessionId);
     if (cards) {
-      console.log("isRoundDone yes");
-      console.log("endRound", cards);
-      socket.emit("session", { type: "endRound", cards });
-      socket.broadcast.emit("session", { type: "endRound", cards });
+      socket.emit("session", { type: "update", cards });
+      socket.broadcast.emit("session", { type: "update", cards });
     } else socket.broadcast.emit("session", { type: "playerSelected", player: data.userId });
   }
   if (data.type === "winnerCard") {
-    data.cards.map((card) => {
-      card.cardId === data.cardId
-        ? changeCardStatus(statusMap.WON, data.sessionId, card.cardId)
-        : changeCardStatus(statusMap.USE, data.sessionId, card.cardId);
-    });
+    await discardPlayedCardsHandler(data.sessionId);
+    await changeCardStatus(statusMap.WON, data.sessionId, data.cardId);
     socket.broadcast.emit("session", { type: "winnerCard", cardId: data.cardId });
   }
 };

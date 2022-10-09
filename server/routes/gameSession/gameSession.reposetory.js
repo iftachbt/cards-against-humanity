@@ -69,3 +69,7 @@ export const updateCards = (status, sessionId, card_id) => {
   const query = "UPDATE cards_db.game_session_cards SET status = ? where session_id=? and card_id=?";
   return runQuery(query, [status, sessionId, card_id]);
 };
+export const discardPlayedCards = (sessionId) => {
+  const query = "UPDATE cards_db.game_session_cards SET status = ? where session_id=? and status=?";
+  return runQuery(query, [statusMap.USE, sessionId, statusMap.PLAY]);
+};
