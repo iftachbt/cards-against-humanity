@@ -25,12 +25,17 @@ export const fetchSession = async (id) => {
   const sessionsList = await getSessionById(id);
   const session = sessionsList[0];
   const playersList = await getPlayerList(id);
+  const playerStatus = await playerStatusArray(id);
   session.turn = playersList[session.turn]?.player_id || 0;
-  return { session, playersList };
+  return { session, playersList, playerStatus };
 };
 export const fetchBlackCard = async (id) => {
   const card = await getSessionBlackCard(id);
   return card[0];
+};
+const playerStatusArray = async (id) => {
+  const playerStatus = await getplayedCards(id);
+  return playerStatus.map((ele) => ele.player_id);
 };
 
 export const fetchPlayerCards = async (sessionId, userId) => {

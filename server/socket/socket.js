@@ -33,9 +33,9 @@ const handleGameEngine = async (socket, data) => {
     await changeCardStatus("play", data.sessionId, data.cardId);
     const cards = await isRoundDone(data.sessionId);
     if (cards) {
-      socket.emit("session", { type: "update", selectedCards: cards });
-      socket.broadcast.emit("session", { type: "update", selectedCards: cards });
-    } else socket.broadcast.emit("session", { type: "playerSelected", player: data.userId });
+      socket.emit("session", { type: "update", selectedCards: cards, status: data.userId });
+      socket.broadcast.emit("session", { type: "update", selectedCards: cards, status: data.userId });
+    } else socket.broadcast.emit("session", { type: "update", status: data.userId });
   }
   if (data.type === "winnerCard") {
     await discardPlayedCardsHandler(data.sessionId);
