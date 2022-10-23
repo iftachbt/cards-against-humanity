@@ -25,7 +25,11 @@ export const addCardToPlayer = (userId, sessionId, cardId) => {
 };
 
 export const getPlayerList = (sessionId) => {
-  const query = "select DISTINCT player_id from cards_db.game_session_cards where session_id = ? and not player_id = ?";
+  const query = `select DISTINCT player_id,userName 
+  from cards_db.game_session_cards 
+  left join cards_db.user on
+  cards_db.game_session_cards.player_id = cards_db.user.id
+  where session_id = ? and not player_id = ?`;
   return runQuery(query, [sessionId, blackCardId]);
 };
 

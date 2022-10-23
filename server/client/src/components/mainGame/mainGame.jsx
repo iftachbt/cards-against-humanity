@@ -5,6 +5,7 @@ import { fetchSessionByCode, getNewCard } from "../../actions/gameSession/gameSe
 import io from "socket.io-client";
 import Chat from "./chat/chat";
 import Judge from "./judgePlayer/judgePlayer";
+import PlayersList from "./playersList/playersList";
 
 function MainGame(props){
   const URL = process.env.REACT_APP_SERVER;
@@ -21,6 +22,7 @@ function MainGame(props){
   let socket = io.connect(URL, { query: "session_id="+sessionCode});
   useEffect(() => {
     getSessionHandler()
+    sendNewUser()
   },[sessionCode])
 
   socket.on("session", (data) => {
@@ -31,16 +33,21 @@ function MainGame(props){
       if(data.cards){
         updateCards(data.cards)
       }
+      if(data.selectedCards){
+        updateSelectedCards(data.selectedCards)
+        setJudgeTurn(true)
+      }
       if(data.status){
         setPlayersStatus(data.status)
         if(data.status.filter(s => s.status !== "play").length === 1)
           setJudgeTurn(true)
       }
-      if(data.winner){}
+      if(data.playersList){
+        setPlayersList(data.playersList)
+      }
     }
     if(data.type === "endRound"){
       setJudgeTurn(true)
-      console.log("newcards",data.cards);
       setCards(data.cards)
     }
     if(data.type === "playerSelected"){
@@ -63,8 +70,11 @@ function MainGame(props){
       updateCards(cards)
       setSession(session)
       setBlackCard(blackCard)
-      setPlayersList(...playersList)
+      setPlayersList(playersList)
     }
+  }
+  const updateSelectedCards = (cards) =>{
+    setSelectedCard(cards);
   }
   const updateCards = (cards) =>{
     const selectedCard = cards.filter(c => c.status === "play")
@@ -83,6 +93,9 @@ function MainGame(props){
   });
     setChoosedCard({...choosedCard, status: "play"})
   }
+  const sendNewUser = () =>{
+    socket.emit("session", { type:"newUser", userId: user.id,  sessionId: sessionCode});
+  }
 
   const headerDisplay = () => {
     return (
@@ -90,6 +103,8 @@ function MainGame(props){
     )
   }
 
+  const chooseWinnerHandler = () => {
+  }
   const chatDisplay = () => {
     return (
       <Chat
@@ -104,9 +119,20 @@ function MainGame(props){
     return (
       <div className={style.blackCardCon}>
         <div className={style.blackCardBox}>
-          <div className={choosedCard ?style.card :style.noCard}>
+          {!judgeTurn 
+          ?<div className={choosedCard ?style.card :style.noCard}>
             {choosedCard && choosedCard.text}
           </div>
+          :selectedCards.map((card,index)=> {
+            return(
+            <div 
+            onClick={() =>chooseWinnerHandler(index)}
+            key={index}
+            className={[style.card,style.white].join(" ")}
+            >
+              {card.text}
+            </div>
+          )})}
           <div className={[style.card,style.black].join(" ")}>
             {blackCard?.text}
           </div>
@@ -139,7 +165,7 @@ function MainGame(props){
             <div 
             onClick={() =>handleClick(index)}
             key={index}
-            className={[style.card,!judgeTurn ?style.white :null].join(" ")}
+            className={[style.card,style.white].join(" ")}
             >
               {card.text}
             </div>
@@ -153,6 +179,9 @@ function MainGame(props){
     <div >
       {headerDisplay()}
       {chatDisplay()}
+      <PlayersList 
+      playersList={playersList}
+      />
       {session?.turn === user.id
       ?<Judge 
         user={user}
@@ -161,6 +190,7 @@ function MainGame(props){
         cards={cards}
         socket={socket}
         judgeTurn={judgeTurn}
+        selectedCards={selectedCards}
         setJudgeTurn={setJudgeTurn}
       />
       :(

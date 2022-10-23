@@ -1,0 +1,24 @@
+.playersListCon{
+  width: 13vw;
+  height: 26vh;
+  background-color: #ebe6ef;
+  overflow: auto;
+  position: absolute;
+  padding: 4px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  border-radius: 10px;
+}
+.playerCon{
+  width: 90%;
+    height: 5vh;
+    margin: 0px 0px 10px 0;
+    background-color: rgb(142 205 174);
+    font-size: 1vw;
+    padding: 3px;
+    border-radius: 2px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}

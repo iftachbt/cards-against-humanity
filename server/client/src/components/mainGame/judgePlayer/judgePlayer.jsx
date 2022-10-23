@@ -2,7 +2,7 @@ import React ,{ useEffect, useState }from "react";
 import style from "../mainGame.module.css"
 
 function Judge(props){
-  const {user,blackCardDisplay,sessionCode,cards,socket,setJudgeTurn,judgeTurn} = props
+  const {user,selectedCards,blackCardDisplay,sessionCode,cards,socket,setJudgeTurn,judgeTurn} = props
   const [choosedCard,setChoosedCard] = useState()
 
   socket.on("session", (data) => {
