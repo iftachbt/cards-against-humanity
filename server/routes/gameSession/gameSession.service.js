@@ -10,7 +10,9 @@ import {
   getSessionBlackCard,
   getSessionById,
   insert,
+  statusMap,
   updateCards,
+  updateSessionStatusById,
 } from "./gameSession.reposetory.js";
 import { uniqueNamesGenerator, adjectives, colors, starWars } from "unique-names-generator";
 
@@ -23,6 +25,7 @@ export const createSession = async (userId) => {
 
 export const fetchSession = async (id) => {
   const sessionsList = await getSessionById(id);
+  console.log("sessionsList", sessionsList);
   const session = sessionsList[0];
   const playersList = await getPlayerList(id);
   const playerStatus = await playerStatusArray(id);
@@ -35,7 +38,7 @@ export const fetchBlackCard = async (id) => {
 };
 const playerStatusArray = async (id) => {
   const playerStatus = await getplayedCards(id);
-  return playerStatus.map((ele) => ele.player_id);
+  return [...playerStatus].map((ele) => ele.player_id);
 };
 
 export const fetchPlayerCards = async (sessionId, userId) => {
@@ -57,8 +60,16 @@ export const changeCardStatus = async (status, sessionId, cardId) => {
 export const isRoundDone = async (sessionId) => {
   const players = await getPlayerList(sessionId);
   const playedCards = await getplayedCards(sessionId);
-  if (players.length - 1 <= playedCards.length) return playedCards;
+  if (players.length - 1 <= playedCards.length) {
+    updateSessionStatusById(1, sessionId);
+    return playedCards;
+  }
   return false;
+};
+export const endJudgeTurn = async (sessionId, winningCard) => {
+  updateSessionStatusById(false, sessionId);
+  await changeCardStatus(statusMap.WON, sessionId, winningCard);
+  discardPlayedCards(sessionId);
 };
 
 export const drawCard = async (sessionId, color) => {

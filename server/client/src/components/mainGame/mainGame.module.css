@@ -1,3 +1,9 @@
+.judgeCon{
+  background-color: red;
+}
+.mainCon{
+  background-color: green;
+}
 .cardsCon{
   overflow: auto;
   margin: auto;

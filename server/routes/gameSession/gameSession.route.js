@@ -19,7 +19,6 @@ GameSessionRoute.get("/session", async (req, res) => {
 });
 GameSessionRoute.get("/session/cards", async (req, res) => {
   const { sessionCode, color } = req.query.body;
-  console.log("route getNewCard: ", sessionCode, color);
   const newCard = await drawCard(sessionCode, color);
   res.send(newCard);
 });

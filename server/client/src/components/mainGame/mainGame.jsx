@@ -15,19 +15,18 @@ function MainGame(props){
   const [playersList,setPlayersList] = useState([])
   const [judgeTurn,setJudgeTurn] = useState(false)
   const [cards,setCards] = useState([])
+  const [playedStatus,setPlayedStatus] = useState(false)
   const [selectedCards,setSelectedCard] = useState([])
   const [choosedCard,setChoosedCard] = useState(null)
   const [blackCard,setBlackCard] = useState()
   const {sessionCode} = useParams()
   let socket = io.connect(URL, { query: "session_id="+sessionCode});
+
   useEffect(() => {
     getSessionHandler()
     sendNewUser()
+    console.log(judgeTurn,"isJudge");
   },[sessionCode])
-  useEffect(() =>{
-    console.log("playersStatus",playersStatus);
-  },[playersStatus])
-
   socket.on("session", (data) => {
     if(data.type === "update"){
       if(data.session){
@@ -43,19 +42,12 @@ function MainGame(props){
       if(data.status){
         setPlayersStatus([...playersStatus, data.status])
         console.log("status",playersStatus);
-        setJudgeTurn(true)
       }
       if(data.playersList){
         setPlayersList(data.playersList)
       }
     }
-    if(data.type === "endRound"){
-      setJudgeTurn(true)
-      setCards(data.cards)
-    }
-    if(data.type === "playerSelected"){
-      console.log("player choose",data.player);
-    }
+   
     if(data.type === "winnerCard"){
       if(data.cardId===choosedCard.cardId){
         console.log("i won");
@@ -70,11 +62,14 @@ function MainGame(props){
   const getSessionHandler = async() =>{
     if(!session?.id){
       const {session,cards,blackCard,playersList,playerStatus} = await fetchSessionByCode(sessionCode)
+      console.log("get session",session);
       updateCards(cards)
       setSession(session)
       setBlackCard(blackCard)
       setPlayersList(playersList)
       setPlayersStatus(playerStatus)
+      setJudgeTurn(session.judge)
+      console.log("selectedCards",selectedCards);
     }
   }
   const updateSelectedCards = (cards) =>{
@@ -83,19 +78,21 @@ function MainGame(props){
   const updateCards = (cards) =>{
     const selectedCard = cards.filter(c => c.status === "play")
     if(selectedCard.length){
-      setChoosedCard(selectedCard)
+      setChoosedCard(...selectedCard)
+      setPlayedStatus(true)
     }
     setCards(cards);
   }
   const handleClick = (index) =>{
-    if(choosedCard && choosedCard.status === "play") return
+    if(choosedCard && playedStatus) return
     setChoosedCard(cards[index]);
   }
 
   const handleDoneClick = () =>{
     socket.emit("session", { type:"cardSelected", userId: user.id,  sessionId: sessionCode ,cardId:choosedCard.card_id
   });
-    setChoosedCard({...choosedCard, status: "play"})
+    setChoosedCard(...choosedCard)
+    setPlayedStatus(true)
   }
   const sendNewUser = () =>{
     socket.emit("session", { type:"newUser", userId: user.id,  sessionId: sessionCode});
@@ -118,7 +115,6 @@ function MainGame(props){
        />
     )
   }
-
   const blackCardDisplay = () => {
     return (
       <div className={style.blackCardCon}>
@@ -130,7 +126,7 @@ function MainGame(props){
           :selectedCards.map((card,index)=> {
             return(
             <div 
-            onClick={() =>chooseWinnerHandler(index)}
+            onClick={session?.turn === user.id ?() =>chooseWinnerHandler(index) :null}
             key={index}
             className={[style.card,style.white].join(" ")}
             >
@@ -144,14 +140,13 @@ function MainGame(props){
        </div>
     )
   }
-
   const doneBtnDisplay = () => {
     return (
       <div className={style.doneBtnCon}>
         <div className={style.doneBtnBox}>
           <button 
-          disabled={!choosedCard || (choosedCard && choosedCard.status === "play")} 
-          onClick={handleDoneClick}>
+          disabled={!choosedCard || (choosedCard && playedStatus)} 
+          onClick={judgeTurn ?null :handleDoneClick}>
             done!
           </button>
         </div>
@@ -163,11 +158,12 @@ function MainGame(props){
     return (
       <div className={style.cardsCon}>
         <div className={style.box}>
+          {console.log("cards1",cards)}
           {cards.map((card,index)=> {
             if(choosedCard && card.id === choosedCard.id) return
             return(
             <div 
-            onClick={() =>handleClick(index)}
+            onClick={judgeTurn ?null :() =>handleClick(index)}
             key={index}
             className={[style.card,style.white].join(" ")}
             >
@@ -180,7 +176,7 @@ function MainGame(props){
   }
 
   return(
-    <div >
+    <div className={judgeTurn ?style.judgeCon :style.mainCon}>
       {headerDisplay()}
       {chatDisplay()}
       <PlayersList 

@@ -41,7 +41,6 @@ function Judge(props){
             if(choosedCard && card.id === choosedCard.id) return
             return(
             <div 
-            onClick={() =>handleClick(index)}
             key={index}
             className={[style.card,style.white].join(" ")}
             >

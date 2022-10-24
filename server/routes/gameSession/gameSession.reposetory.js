@@ -15,8 +15,12 @@ export const insert = (session) => {
 };
 
 export const getSessionById = (id) => {
-  const query = "SELECT id,name,turn FROM cards_db.game_session WHERE id = ?";
+  const query = "SELECT * FROM cards_db.game_session WHERE id = ?";
   return runQuery(query, [id]);
+};
+export const updateSessionStatusById = (status, sessionId) => {
+  const query = "UPDATE cards_db.game_session SET judge = ? where id=?";
+  return runQuery(query, ["1", sessionId]);
 };
 
 export const addCardToPlayer = (userId, sessionId, cardId) => {

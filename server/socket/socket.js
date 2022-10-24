@@ -1,7 +1,12 @@
 import { Server } from "socket.io";
 import { addMsg, getChatBySessionId } from "../routes/chat/chat.service.js";
 import { statusMap } from "../routes/gameSession/gameSession.reposetory.js";
-import { changeCardStatus, fetchSession, isRoundDone } from "../routes/gameSession/gameSession.service.js";
+import {
+  changeCardStatus,
+  endJudgeTurn,
+  fetchSession,
+  isRoundDone,
+} from "../routes/gameSession/gameSession.service.js";
 
 export function connectSocket(server) {
   const io = new Server(server, {
@@ -38,8 +43,7 @@ const handleGameEngine = async (socket, data) => {
     } else socket.broadcast.emit("session", { type: "update", status: data.userId });
   }
   if (data.type === "winnerCard") {
-    await discardPlayedCardsHandler(data.sessionId);
-    await changeCardStatus(statusMap.WON, data.sessionId, data.cardId);
+    endJudgeTurn(sessionId, data.cardId);
     socket.broadcast.emit("session", { type: "winnerCard", cardId: data.cardId });
   }
 };
