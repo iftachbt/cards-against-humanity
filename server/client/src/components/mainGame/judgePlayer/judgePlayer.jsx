@@ -2,21 +2,12 @@ import React ,{ useEffect, useState }from "react";
 import style from "../mainGame.module.css"
 
 function Judge(props){
-  const {user,selectedCards,blackCardDisplay,sessionCode,cards,socket,setJudgeTurn,judgeTurn} = props
-  const [choosedCard,setChoosedCard] = useState()
-
-  socket.on("session", (data) => {
-    if(data.type === "endRound"){ }
-    if(data.type === "playerSelected"){}
-  })
-
-  const handleClick = (index) =>{
-    setChoosedCard(cards[index]);
-  }
+  const {choosedCard,setChoosedCard,blackCardDisplay,sessionCode,blackCard,cards,socket,setJudgeTurn,judgeTurn} = props
 
   const handleDoneClick = () =>{
-    socket.emit("session", { type:"winnerCard",cards , sessionId: sessionCode ,cardId:choosedCard.card_id});
+    socket.emit("session", { type:"winnerCard",cards , sessionId: sessionCode ,cardId:choosedCard.card_id,blackCardId:blackCard?.card_id});
     setJudgeTurn(false)
+    setChoosedCard(null)
   }
 
   const doneBtnDisplay = () => {
@@ -24,7 +15,7 @@ function Judge(props){
       <div className={style.doneBtnCon}>
         <div className={style.doneBtnBox}>
           <button 
-          disabled={!choosedCard || (choosedCard && choosedCard.status === "play")} 
+          disabled={!choosedCard} 
           onClick={handleDoneClick}>
             done!
           </button>

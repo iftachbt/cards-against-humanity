@@ -32,7 +32,12 @@ export const passportInitialize = (passport) => {
   });
 
   passport.deserializeUser(async (id, done) => {
-    const res = await getUserById(id);
+    let res = null;
+    try {
+      res = await getUserById(id);
+    } catch (err) {
+      return done(null, false);
+    }
     if (!res[0]) return done(null, false);
     return done(null, res[0]);
   });

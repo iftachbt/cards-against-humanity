@@ -1,7 +1,7 @@
 import randomize from "randomatic";
 import {
   addCardToPlayer,
-  blackCardId,
+  blackCardColor,
   discardPlayedCards,
   getFilterdSessionCards,
   getplayedCards,
@@ -12,14 +12,14 @@ import {
   insert,
   statusMap,
   updateCards,
-  updateSessionStatusById,
+  updateSessionTurnById,
 } from "./gameSession.reposetory.js";
 import { uniqueNamesGenerator, adjectives, colors, starWars } from "unique-names-generator";
 
 export const createSession = async (userId) => {
   const id = randomize("0", 6);
   await insert({ hostId: userId, name: randomName(), id });
-  await addCardToPlayer(blackCardId, id, (await drawCard(id, blackCardId)).id);
+  await addCardToPlayer(blackCardColor, id, (await drawCard(id, blackCardColor)).id);
   return id;
 };
 
@@ -28,17 +28,19 @@ export const fetchSession = async (id) => {
   console.log("sessionsList", sessionsList);
   const session = sessionsList[0];
   const playersList = await getPlayerList(id);
-  const playerStatus = await playerStatusArray(id);
+  const { playedCards, playerStatus } = await fetchPlayerStatus(id);
   session.turn = playersList[session.turn]?.player_id || 0;
-  return { session, playersList, playerStatus };
+  session.judge = await isRoundDone(id);
+  return { session, playersList, playerStatus, playedCards };
 };
 export const fetchBlackCard = async (id) => {
   const card = await getSessionBlackCard(id);
   return card[0];
 };
-const playerStatusArray = async (id) => {
-  const playerStatus = await getplayedCards(id);
-  return [...playerStatus].map((ele) => ele.player_id);
+const fetchPlayerStatus = async (id) => {
+  const playedCards = await getplayedCards(id);
+  const playerStatus = [...playedCards].map((ele) => ele.player_id);
+  return { playedCards, playerStatus };
 };
 
 export const fetchPlayerCards = async (sessionId, userId) => {
@@ -61,20 +63,35 @@ export const isRoundDone = async (sessionId) => {
   const players = await getPlayerList(sessionId);
   const playedCards = await getplayedCards(sessionId);
   if (players.length - 1 <= playedCards.length) {
-    updateSessionStatusById(1, sessionId);
     return playedCards;
   }
   return false;
 };
-export const endJudgeTurn = async (sessionId, winningCard) => {
-  updateSessionStatusById(false, sessionId);
+export const endJudgeTurn = async (sessionId, winningCard, blackCardId) => {
   await changeCardStatus(statusMap.WON, sessionId, winningCard);
   discardPlayedCards(sessionId);
+  await updateCards(statusMap.USE, sessionId, blackCardId);
+  const newTurn = await changeJudgeTurn(sessionId);
+  const newBlackCard = await drawCard(sessionId, blackCardColor);
+  return { newBlackCard, newTurn };
 };
-
+const changeJudgeTurn = async (sessionId) => {
+  const players = await getPlayerList(sessionId);
+  const session = await getSessionById(sessionId);
+  const sessionTurn = session[0].turn;
+  if (players.length - 1 <= sessionTurn) {
+    updateSessionTurnById(0, sessionId);
+    return players[0]?.player_id || 0;
+  } else {
+    updateSessionTurnById(sessionTurn + 1, sessionId);
+    return players[sessionTurn + 1]?.player_id || 0;
+  }
+};
 export const drawCard = async (sessionId, color) => {
   const cardsList = await getFilterdSessionCards(sessionId, color);
-  return cardsList[Math.floor(Math.random() * cardsList.length)];
+  const newCard = cardsList[Math.floor(Math.random() * cardsList.length)];
+  console.log("newCard", newCard);
+  return newCard;
 };
 export const discardPlayedCardsHandler = (sessionId) => discardPlayedCards(sessionId);
 

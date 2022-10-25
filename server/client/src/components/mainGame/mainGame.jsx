@@ -25,8 +25,11 @@ function MainGame(props){
   useEffect(() => {
     getSessionHandler()
     sendNewUser()
-    console.log(judgeTurn,"isJudge");
   },[sessionCode])
+  useEffect(() => {
+    console.log("blackCard",blackCard);
+  },[blackCard])
+
   socket.on("session", (data) => {
     if(data.type === "update"){
       if(data.session){
@@ -41,35 +44,42 @@ function MainGame(props){
       }
       if(data.status){
         setPlayersStatus([...playersStatus, data.status])
-        console.log("status",playersStatus);
       }
       if(data.playersList){
         setPlayersList(data.playersList)
       }
-    }
-   
-    if(data.type === "winnerCard"){
-      if(data.cardId===choosedCard.cardId){
-        console.log("i won");
+      if(data.winnerId){
+        handleEndJudgeTurn(data)
       }
-      const newCard = getNewCard({sessionCode,color:"white"})
-      console.log("maingame newCard",newCard);
-      cards.splice(cards.indexOf(choosedCard), 1, newCard)
-      setJudgeTurn(false)
-      setChoosedCard(null)
     }
+  
   })
+  const handleEndJudgeTurn = async(data) => {
+    if(data.winnerId===choosedCard.cardId){
+      console.log("i won");
+    }
+    const newCard = await getNewCard({sessionCode,color:"white"})
+    console.log("newCard",newCard);
+    cards.splice(cards.indexOf(choosedCard), 1, newCard)
+    setPlayersStatus([])
+    setJudgeTurn(false)
+    setPlayedStatus(false)
+    setSelectedCard([])
+    setChoosedCard(null)
+    setBlackCard(data.newBlackCard)
+    setSession(pre => {return {...pre, turn:data.newTurn}})
+
+  }
   const getSessionHandler = async() =>{
     if(!session?.id){
-      const {session,cards,blackCard,playersList,playerStatus} = await fetchSessionByCode(sessionCode)
-      console.log("get session",session);
+      const {session,cards,blackCard,playersList,playerStatus,playedCards} = await fetchSessionByCode(sessionCode)
       updateCards(cards)
       setSession(session)
       setBlackCard(blackCard)
       setPlayersList(playersList)
       setPlayersStatus(playerStatus)
       setJudgeTurn(session.judge)
-      console.log("selectedCards",selectedCards);
+      if(session.judge) setSelectedCard(playedCards)
     }
   }
   const updateSelectedCards = (cards) =>{
@@ -104,7 +114,8 @@ function MainGame(props){
     )
   }
 
-  const chooseWinnerHandler = () => {
+  const chooseWinnerHandler = (index) => {
+    setChoosedCard(selectedCards[index])
   }
   const chatDisplay = () => {
     return (
@@ -188,12 +199,15 @@ function MainGame(props){
       {session?.turn === user.id
       ?<Judge 
         user={user}
+        choosedCard={choosedCard}
+        blackCard={blackCard}
         blackCardDisplay={blackCardDisplay}
         sessionCode={sessionCode}
         cards={cards}
         socket={socket}
         judgeTurn={judgeTurn}
-        selectedCards={selectedCards}
+        playedStatus={playedStatus}
+        setChoosedCard={setChoosedCard}
         setJudgeTurn={setJudgeTurn}
       />
       :(
