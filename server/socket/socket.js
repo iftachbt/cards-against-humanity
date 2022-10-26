@@ -1,7 +1,12 @@
 import { Server } from "socket.io";
 import { addMsg, getChatBySessionId } from "../routes/chat/chat.service.js";
 import { statusMap } from "../routes/gameSession/gameSession.reposetory.js";
-import { changeCardStatus, isRoundDone } from "../routes/gameSession/gameSession.service.js";
+import {
+  changeCardStatus,
+  endJudgeTurn,
+  fetchSession,
+  isRoundDone,
+} from "../routes/gameSession/gameSession.service.js";
 
 export function connectSocket(server) {
   const io = new Server(server, {
@@ -25,18 +30,22 @@ export function connectSocket(server) {
 }
 
 const handleGameEngine = async (socket, data) => {
+  if (data.type === "newUser") {
+    const { playersList } = await fetchSession(data.sessionId);
+    socket.broadcast.emit("session", { type: "update", playersList: playersList });
+  }
   if (data.type === "cardSelected") {
     await changeCardStatus("play", data.sessionId, data.cardId);
     const cards = await isRoundDone(data.sessionId);
     if (cards) {
-      socket.emit("session", { type: "update", cards });
-      socket.broadcast.emit("session", { type: "update", cards });
-    } else socket.broadcast.emit("session", { type: "playerSelected", player: data.userId });
+      socket.emit("session", { type: "update", selectedCards: cards, status: data.userId });
+      socket.broadcast.emit("session", { type: "update", selectedCards: cards, status: data.userId });
+    } else socket.broadcast.emit("session", { type: "update", status: data.userId });
   }
   if (data.type === "winnerCard") {
-    await discardPlayedCardsHandler(data.sessionId);
-    await changeCardStatus(statusMap.WON, data.sessionId, data.cardId);
-    socket.broadcast.emit("session", { type: "winnerCard", cardId: data.cardId });
+    const { newBlackCard, newTurn } = await endJudgeTurn(data.sessionId, data.cardId, data.blackCardId);
+    socket.broadcast.emit("session", { type: "update", winnerId: data.cardId, newBlackCard, newTurn });
+    socket.emit("session", { type: "update", winnerId: data.cardId, newBlackCard, newTurn });
   }
 };
 

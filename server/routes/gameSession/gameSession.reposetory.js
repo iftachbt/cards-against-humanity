@@ -1,3 +1,4 @@
+import { InternalServerError } from "../../error_handling/error.class.js";
 import { runQuery } from "../../mongoDB/DB.js";
 
 export const statusMap = {
@@ -6,17 +7,20 @@ export const statusMap = {
   USE: "use", //cards that have been used and are no longer in the game
   WON: "won", //used cards that wone there round
 };
-export const blackCardId = "black";
+export const blackCardColor = "black";
 
 export const insert = (session) => {
-  console.log("session", session);
   const query = "INSERT INTO cards_db.game_session(host_id,name,id) values (?,?,?)";
   return runQuery(query, [session.hostId, session.name, session.id]);
 };
 
 export const getSessionById = (id) => {
-  const query = "SELECT id,name,turn FROM cards_db.game_session WHERE id = ?";
+  const query = "SELECT * FROM cards_db.game_session WHERE id = ?";
   return runQuery(query, [id]);
+};
+export const updateSessionTurnById = (turn, sessionId) => {
+  const query = "UPDATE cards_db.game_session SET turn = ? where id=?";
+  return runQuery(query, [turn, sessionId]);
 };
 
 export const addCardToPlayer = (userId, sessionId, cardId) => {
@@ -25,8 +29,12 @@ export const addCardToPlayer = (userId, sessionId, cardId) => {
 };
 
 export const getPlayerList = (sessionId) => {
-  const query = "select DISTINCT player_id from cards_db.game_session_cards where session_id = ? and not player_id = ?";
-  return runQuery(query, [sessionId, blackCardId]);
+  const query = `select DISTINCT player_id,userName 
+  from cards_db.game_session_cards 
+  left join cards_db.user on
+  cards_db.game_session_cards.player_id = cards_db.user.id
+  where session_id = ? and not player_id = ?`;
+  return runQuery(query, [sessionId, blackCardColor]);
 };
 
 export const getPlayerCards = (sessionId, userId) => {
@@ -49,7 +57,7 @@ export const getSessionBlackCard = (sessionId) => {
    player_id = ? and 
    status = ?
   `;
-  return runQuery(query, [sessionId, blackCardId, statusMap.IN]);
+  return runQuery(query, [sessionId, blackCardColor, statusMap.IN]);
 };
 
 export const getFilterdSessionCards = (sessionId, color) => {
