@@ -20,6 +20,7 @@ function MainGame(props){
   const [choosedCard,setChoosedCard] = useState(null)
   const [blackCard,setBlackCard] = useState()
   const {sessionCode} = useParams()
+  let socketConnection = 1
   let socket = io.connect(URL, { query: "session_id="+sessionCode});
 
   useEffect(() => {
@@ -53,8 +54,6 @@ function MainGame(props){
     
   })
   const handleEndJudgeTurn = async(data) => {
-    console.log(data.winnerId===choosedCard?.card_id ,!(session?.turn===user.id));
-    if(data.winnerId===choosedCard?.card_id &&!(session?.turn === user.id)) alert("i won");
     refreshCards()
     setPlayersStatus([])
     setJudgeTurn(false)
