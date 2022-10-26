@@ -4,7 +4,6 @@ import style from "./playersList.module.css"
 
 function PlayersList(props){
   const {user,playersList,session,playersStatus} = props
-  console.log("user",user);
   const icon = (player) =>{
   if(player.player_id === session?.turn) return <Gavel />
   if(playersStatus?.find(ele => ele === player.player_id)) return <Done />

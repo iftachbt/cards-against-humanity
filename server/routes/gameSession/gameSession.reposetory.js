@@ -1,3 +1,4 @@
+import { InternalServerError } from "../../error_handling/error.class.js";
 import { runQuery } from "../../mongoDB/DB.js";
 
 export const statusMap = {
@@ -9,7 +10,6 @@ export const statusMap = {
 export const blackCardColor = "black";
 
 export const insert = (session) => {
-  console.log("session", session);
   const query = "INSERT INTO cards_db.game_session(host_id,name,id) values (?,?,?)";
   return runQuery(query, [session.hostId, session.name, session.id]);
 };

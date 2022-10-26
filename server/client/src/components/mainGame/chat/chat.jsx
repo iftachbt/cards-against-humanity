@@ -33,7 +33,6 @@ function Chat(props){
   };
 
   const handleSendMessage = () => {
-    console.log(message);
     socket.emit("session", {type:"chat" ,msg: message ,userId: user.id, sessionId: session.id });
     setMessage("")
   };

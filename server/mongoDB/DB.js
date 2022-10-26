@@ -10,13 +10,19 @@ const dbConfig = {
   database: process.env.DB_NAME,
 };
 
+const con = null;
+const getCon = () => {
+  return con ? con : mysql.createConnection(dbConfig);
+};
+
 export const runQuery = (query, values, op) => {
   if (op?.log) console.log(query, values);
   return new Promise((resolve) => {
-    const connection = mysql.createConnection(dbConfig);
+    const connection = getCon();
     connection.connect(function (err) {
       if (err) throw new InternalServerError(err.code);
       connection.query(query, values, function (err, result) {
+        connection.end();
         let res = result;
         if (err) {
           if (op?.codeInstedOfError) res = err.code;

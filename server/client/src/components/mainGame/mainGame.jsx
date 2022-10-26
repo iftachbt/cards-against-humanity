@@ -26,9 +26,7 @@ function MainGame(props){
     getSessionHandler()
     sendNewUser()
   },[sessionCode])
-  useEffect(() => {
-    console.log("blackCard",blackCard);
-  },[blackCard])
+
 
   socket.on("session", (data) => {
     if(data.type === "update"){
@@ -52,15 +50,13 @@ function MainGame(props){
         handleEndJudgeTurn(data)
       }
     }
-  
+    
   })
   const handleEndJudgeTurn = async(data) => {
-    if(data.winnerId===choosedCard.cardId){
-      console.log("i won");
-    }
-    const newCard = await getNewCard({sessionCode,color:"white"})
-    console.log("newCard",newCard);
-    cards.splice(cards.indexOf(choosedCard), 1, newCard)
+    console.log(data.winnerId);
+    console.log(choosedCard);
+    if(data.winnerId===choosedCard?.cardId) alert("i won");
+    refreshCards()
     setPlayersStatus([])
     setJudgeTurn(false)
     setPlayedStatus(false)
@@ -68,14 +64,19 @@ function MainGame(props){
     setChoosedCard(null)
     setBlackCard(data.newBlackCard)
     setSession(pre => {return {...pre, turn:data.newTurn}})
-
   }
+  const refreshCards = async () =>{
+      const fetchedcards = await getNewCard({sessionCode})
+      updateCards(fetchedcards)
+  }
+  
   const getSessionHandler = async() =>{
     if(!session?.id){
       const {session,cards,blackCard,playersList,playerStatus,playedCards} = await fetchSessionByCode(sessionCode)
       updateCards(cards)
       setSession(session)
       setBlackCard(blackCard)
+      console.log("blackCard",blackCard);
       setPlayersList(playersList)
       setPlayersStatus(playerStatus)
       setJudgeTurn(session.judge)
@@ -101,7 +102,7 @@ function MainGame(props){
   const handleDoneClick = () =>{
     socket.emit("session", { type:"cardSelected", userId: user.id,  sessionId: sessionCode ,cardId:choosedCard.card_id
   });
-    setChoosedCard(...choosedCard)
+    setChoosedCard(choosedCard)
     setPlayedStatus(true)
   }
   const sendNewUser = () =>{
@@ -169,7 +170,6 @@ function MainGame(props){
     return (
       <div className={style.cardsCon}>
         <div className={style.box}>
-          {console.log("cards1",cards)}
           {cards.map((card,index)=> {
             if(choosedCard && card.id === choosedCard.id) return
             return(

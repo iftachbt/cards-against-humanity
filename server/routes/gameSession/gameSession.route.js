@@ -1,5 +1,11 @@
 import express from "express";
-import { createSession, drawCard, fetchBlackCard, fetchPlayerCards, fetchSession } from "./gameSession.service.js";
+import {
+  createSession,
+  drowCardToPlayer,
+  fetchBlackCard,
+  fetchPlayerCards,
+  fetchSession,
+} from "./gameSession.service.js";
 
 export const GameSessionRoute = express.Router();
 export const GameSessionPrefix = "/game";
@@ -23,8 +29,11 @@ const getSessionHandler = async (req, res) => {
   res.send({ session, cards, blackCard, playersList, playerStatus, playedCards });
 };
 const getNewWhiteCard = async (req, res) => {
-  const { sessionCode, color } = req.query.body;
-  console.log("get new white", { sessionCode, color });
-  const newCard = await drawCard(sessionCode, color);
-  res.send(newCard);
+  const { sessionCode } = req.query;
+  try {
+    const newCard = await drowCardToPlayer(sessionCode, req.user.id);
+    res.send(newCard);
+  } catch (err) {
+    console.log(err);
+  }
 };

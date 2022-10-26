@@ -25,7 +25,6 @@ export const createSession = async (userId) => {
 
 export const fetchSession = async (id) => {
   const sessionsList = await getSessionById(id);
-  console.log("sessionsList", sessionsList);
   const session = sessionsList[0];
   const playersList = await getPlayerList(id);
   const { playedCards, playerStatus } = await fetchPlayerStatus(id);
@@ -56,6 +55,15 @@ const addUserToGame = async (sessionId, userId) => {
     await addCardToPlayer(userId, sessionId, (await drawCard(sessionId, "white")).id);
   }
 };
+export const drowCardToPlayer = async (sessionId, userId) => {
+  const oldCards = await fetchPlayerCards(sessionId, userId);
+  for (let i = oldCards.length; i < 10; i++) {
+    const NewWhiteCard = await drawCard(sessionId, "white");
+    await addCardToPlayer(userId, sessionId, NewWhiteCard?.id);
+  }
+  return await fetchPlayerCards(sessionId, userId);
+};
+
 export const changeCardStatus = async (status, sessionId, cardId) => {
   await updateCards(status, sessionId, cardId);
 };
@@ -73,6 +81,7 @@ export const endJudgeTurn = async (sessionId, winningCard, blackCardId) => {
   await updateCards(statusMap.USE, sessionId, blackCardId);
   const newTurn = await changeJudgeTurn(sessionId);
   const newBlackCard = await drawCard(sessionId, blackCardColor);
+  await addCardToPlayer(blackCardColor, sessionId, newBlackCard.id);
   return { newBlackCard, newTurn };
 };
 const changeJudgeTurn = async (sessionId) => {
@@ -90,7 +99,6 @@ const changeJudgeTurn = async (sessionId) => {
 export const drawCard = async (sessionId, color) => {
   const cardsList = await getFilterdSessionCards(sessionId, color);
   const newCard = cardsList[Math.floor(Math.random() * cardsList.length)];
-  console.log("newCard", newCard);
   return newCard;
 };
 export const discardPlayedCardsHandler = (sessionId) => discardPlayedCards(sessionId);
