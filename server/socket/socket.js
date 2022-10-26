@@ -43,7 +43,11 @@ const handleGameEngine = async (socket, data) => {
     } else socket.broadcast.emit("session", { type: "update", status: data.userId });
   }
   if (data.type === "winnerCard") {
+    console.log("got here winnerCard");
     const { newBlackCard, newTurn } = await endJudgeTurn(data.sessionId, data.cardId, data.blackCardId);
+    const chatList = await addMsg("admin", data.sessionId, data.cardText);
+    socket.broadcast.emit("session", { type: "chatList", msg: chatList });
+    socket.emit("session", { type: "chatList", msg: chatList });
     socket.broadcast.emit("session", { type: "update", winnerId: data.cardId, newBlackCard, newTurn });
     socket.emit("session", { type: "update", winnerId: data.cardId, newBlackCard, newTurn });
   }

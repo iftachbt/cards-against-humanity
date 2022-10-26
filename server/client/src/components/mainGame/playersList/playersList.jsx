@@ -14,6 +14,7 @@ function PlayersList(props){
       {playersList.map((player) =>{
         return(
           <div key={player.player_id} className={style.playerCon}>
+            <div>{player.win}</div>
             <div>{player.userName}</div>
             <div>{player.status}</div>
             {icon(player)}

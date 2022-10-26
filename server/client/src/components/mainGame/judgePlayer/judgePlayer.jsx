@@ -5,7 +5,7 @@ function Judge(props){
   const {choosedCard,setChoosedCard,blackCardDisplay,sessionCode,blackCard,cards,socket,setJudgeTurn,judgeTurn} = props
 
   const handleDoneClick = () =>{
-    socket.emit("session", { type:"winnerCard",cards , sessionId: sessionCode ,cardId:choosedCard.card_id,blackCardId:blackCard?.card_id});
+    socket.emit("session", { type:"winnerCard",cards , sessionId: sessionCode ,cardId:choosedCard.card_id,cardText:choosedCard.text,blackCardId:blackCard?.card_id});
     setJudgeTurn(false)
     setChoosedCard(null)
   }
