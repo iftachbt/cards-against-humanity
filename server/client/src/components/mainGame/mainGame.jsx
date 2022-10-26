@@ -53,9 +53,8 @@ function MainGame(props){
     
   })
   const handleEndJudgeTurn = async(data) => {
-    console.log(data.winnerId);
-    console.log(choosedCard);
-    if(data.winnerId===choosedCard?.cardId) alert("i won");
+    console.log(data.winnerId===choosedCard?.card_id ,!(session?.turn===user.id));
+    if(data.winnerId===choosedCard?.card_id &&!(session?.turn === user.id)) alert("i won");
     refreshCards()
     setPlayersStatus([])
     setJudgeTurn(false)
@@ -76,7 +75,6 @@ function MainGame(props){
       updateCards(cards)
       setSession(session)
       setBlackCard(blackCard)
-      console.log("blackCard",blackCard);
       setPlayersList(playersList)
       setPlayersStatus(playerStatus)
       setJudgeTurn(session.judge)
