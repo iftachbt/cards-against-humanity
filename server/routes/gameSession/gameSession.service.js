@@ -9,6 +9,7 @@ import {
   getPlayerList,
   getSessionBlackCard,
   getSessionById,
+  getWonCards,
   insert,
   statusMap,
   updateCards,
@@ -26,11 +27,21 @@ export const createSession = async (userId) => {
 export const fetchSession = async (id) => {
   const sessionsList = await getSessionById(id);
   const session = sessionsList[0];
-  const playersList = await getPlayerList(id);
+  const playersList = await fetchWins(id);
   const { playedCards, playerStatus } = await fetchPlayerStatus(id);
   session.turn = playersList[session.turn]?.player_id || 0;
   session.judge = await isRoundDone(id);
   return { session, playersList, playerStatus, playedCards };
+};
+
+export const fetchWins = async (id) => {
+  const playersList = await getPlayerList(id);
+  const newList = await Promise.all(
+    playersList.map((user) => {
+      return getWonCards(id, user.player_id).then((arr) => ({ ...user, win: arr.length }));
+    })
+  );
+  return newList;
 };
 export const fetchBlackCard = async (id) => {
   const card = await getSessionBlackCard(id);

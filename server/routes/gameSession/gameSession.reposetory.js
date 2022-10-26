@@ -29,7 +29,7 @@ export const addCardToPlayer = (userId, sessionId, cardId) => {
 };
 
 export const getPlayerList = (sessionId) => {
-  const query = `select DISTINCT player_id,userName 
+  const query = `select DISTINCT player_id,userName
   from cards_db.game_session_cards 
   left join cards_db.user on
   cards_db.game_session_cards.player_id = cards_db.user.id
@@ -47,6 +47,17 @@ export const getPlayerCards = (sessionId, userId) => {
    (status = ? or status = ?)
   `;
   return runQuery(query, [sessionId, userId, statusMap.IN, statusMap.PLAY]);
+};
+export const getWonCards = (sessionId, userId) => {
+  const query = `
+  SELECT * FROM cards_db.game_session_cards
+   left join cards_db.cards on
+   cards_db.game_session_cards.card_id = cards_db.cards.id
+   WHERE session_id = ? and
+   player_id = ? and 
+   status = ?
+  `;
+  return runQuery(query, [sessionId, userId, statusMap.WON]);
 };
 export const getSessionBlackCard = (sessionId) => {
   const query = `

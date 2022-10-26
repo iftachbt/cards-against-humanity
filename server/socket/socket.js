@@ -30,7 +30,6 @@ export function connectSocket(server) {
 }
 
 const handleGameEngine = async (socket, data) => {
-  console.log("got to socket");
   if (data.type === "newUser") {
     const { playersList } = await fetchSession(data.sessionId);
     socket.broadcast.emit("session", { type: "update", playersList: playersList });
