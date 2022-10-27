@@ -4,6 +4,21 @@
   flex-direction: row;
   justify-content: space-between;
 }
+.notyNumStyle{
+  position: absolute;
+  right: -6px;
+  top: -9px;
+  background-color: rgb(29, 161, 242);
+  font-size:  11px;
+  color:  white;
+  display:  inline;
+  padding: 3px 5px;
+  border-radius:  20px;
+}
+.chatBubbleCon{
+  position: absolute;
+  left: 92vw;
+}
 .messageCon{
   background-color: #ccd8f2 !important;
   margin: 7px auto 4px auto;

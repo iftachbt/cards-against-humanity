@@ -2,7 +2,7 @@ import React ,{ useEffect, useState }from "react";
 import style from "./chat.module.css"
 import moment from "moment"
 import {IconButton,Drawer,Divider,Typography} from '@mui/material/';
-import {ChevronRight,ChevronLeft,Send} from '@mui/icons-material/';
+import {ChevronRight,ChevronLeft,Send,ChatBubbleOutlineOutlined} from '@mui/icons-material/';
 // import ChevronLeft from '@mui/icons-material/ChevronLeft';
 
 
@@ -12,10 +12,17 @@ function Chat(props){
   const [open,setOpen]=useState(false)
   const [message,setMessage]=useState("")
   const [messagesArray,setMessagesArray]=useState([])
+  const [haventReadMessages,setHaventReadMessages]=useState([])
+  const [messagesCount,setMessagesCount]=useState(0)
 
+  useEffect(() => {
+    setMessagesCount(haventReadMessages.length)
+  }
+    ,[haventReadMessages])
   socket.on("session", (data) => {
     if(data.type === "chatList"){
       setMessagesArray(data.msg)
+      setHaventReadMessages([...haventReadMessages,data.msg])
     }
   })
 
@@ -30,6 +37,7 @@ function Chat(props){
 
   const handleDrawerClose = () => {
     setOpen(false);
+    setHaventReadMessages([])
   };
 
   const handleSendMessage = () => {
@@ -50,7 +58,10 @@ function Chat(props){
         onClick={handleDrawerOpen}
         sx={{ ...(open && { display: 'none' }) }}
       >
-        <ChevronLeft />
+        <div className={style.chatBubbleCon}>
+          {messagesCount > 0 ? <div className={style.notyNumStyle}>{messagesCount}</div> : null}
+          <ChatBubbleOutlineOutlined />
+        </div>
       </IconButton>
       <div className={style.chatCon}>
       <Drawer
