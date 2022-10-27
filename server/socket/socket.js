@@ -63,6 +63,9 @@ const handleGameEngine = async (socket, data) => {
     socket.leave(socket.request._query["session_id"]);
     socket.disconnect();
   }
+  if (data.type === "kickOutUser") {
+    socket.broadcast.emit("session", { type: "update", leave: data.userId });
+  }
 };
 const handleChat = async (socket, data) => {
   if (data.type === "getChat") {

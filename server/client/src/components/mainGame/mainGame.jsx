@@ -52,6 +52,9 @@ function MainGame(props){
       if(data.newTurn){
         setSession(pre => {return {...pre, turn:data.newTurn}})
       }
+      if(data.leave){
+        if(data.leave === user.id)leaveGame()
+      }
     }
     
   })
@@ -69,9 +72,12 @@ function MainGame(props){
       updateCards(fetchedcards)
   }
   const leaveGame = () =>{
-    socket.emit("session", { type:"disconnect", userId: user.id,  sessionId: sessionCode});
+    socket.emit("session", { type:"disconnect", userId:user.id,  sessionId: sessionCode});
     socket.disconnect()
     navigate('/')
+  }
+  const kickOutUser = (userId) =>{
+    socket.emit("session", { type:"kickOutUser", userId});
   }
   const getSessionHandler = async() =>{
     if(!session?.id){
@@ -170,7 +176,7 @@ function MainGame(props){
 
   const leaveBtnDisplay = () => {
     return (
-        <div className={style.box} onClick={leaveGame}>
+        <div className={style.box} onClick={() => leaveGame(user.id)}>
           leaveGame
         </div>
     )
@@ -205,6 +211,7 @@ function MainGame(props){
       session={session}
       user={user}
       playersStatus={playersStatus}
+      kickOutUser={kickOutUser}
       />
       {session?.turn === user.id
       ?<Judge 
