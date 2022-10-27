@@ -2,6 +2,7 @@ import randomize from "randomatic";
 import {
   addCardToPlayer,
   blackCardColor,
+  deleteUserFromSession,
   discardPlayedCards,
   getFilterdSessionCards,
   getplayedCards,
@@ -52,7 +53,6 @@ const fetchPlayerStatus = async (id) => {
   const playerStatus = [...playedCards].map((ele) => ele.player_id);
   return { playedCards, playerStatus };
 };
-
 export const fetchPlayerCards = async (sessionId, userId) => {
   let playerCards = await getPlayerCards(sessionId, userId);
   if (!playerCards.length) {
@@ -60,6 +60,10 @@ export const fetchPlayerCards = async (sessionId, userId) => {
     playerCards = getPlayerCards(sessionId, userId);
   }
   return playerCards;
+};
+export const removeUserFromGame = async (sessionId, userId) => {
+  await deleteUserFromSession(userId, sessionId);
+  return await fetchWins(sessionId);
 };
 const addUserToGame = async (sessionId, userId) => {
   for (let i = 0; i < 10; i++) {
@@ -74,7 +78,6 @@ export const drowCardToPlayer = async (sessionId, userId) => {
   }
   return await fetchPlayerCards(sessionId, userId);
 };
-
 export const changeCardStatus = async (status, sessionId, cardId) => {
   await updateCards(status, sessionId, cardId);
 };
@@ -93,9 +96,10 @@ export const endJudgeTurn = async (sessionId, winningCard, blackCardId) => {
   const newTurn = await changeJudgeTurn(sessionId);
   const newBlackCard = await drawCard(sessionId, blackCardColor);
   await addCardToPlayer(blackCardColor, sessionId, newBlackCard.id);
-  return { newBlackCard, newTurn };
+  const playersList = await fetchWins(sessionId);
+  return { newBlackCard, newTurn, playersList };
 };
-const changeJudgeTurn = async (sessionId) => {
+export const changeJudgeTurn = async (sessionId) => {
   const players = await getPlayerList(sessionId);
   const session = await getSessionById(sessionId);
   const sessionTurn = session[0].turn;
@@ -107,13 +111,19 @@ const changeJudgeTurn = async (sessionId) => {
     return players[sessionTurn + 1]?.player_id || 0;
   }
 };
+export const isUserTurn = async (sessionId, userId) => {
+  const players = await getPlayerList(sessionId);
+  const session = await getSessionById(sessionId);
+  const sessionTurn = session[0].turn;
+  if (players[sessionTurn]?.player_id === userId) return true;
+  return false;
+};
 export const drawCard = async (sessionId, color) => {
   const cardsList = await getFilterdSessionCards(sessionId, color);
   const newCard = cardsList[Math.floor(Math.random() * cardsList.length)];
   return newCard;
 };
 export const discardPlayedCardsHandler = (sessionId) => discardPlayedCards(sessionId);
-
 const randomName = () =>
   uniqueNamesGenerator({
     dictionaries: [adjectives, colors, starWars],

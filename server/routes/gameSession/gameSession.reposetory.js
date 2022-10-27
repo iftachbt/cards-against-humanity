@@ -76,6 +76,10 @@ export const getFilterdSessionCards = (sessionId, color) => {
     "select * from cards_db.cards where color = ? and id not in (SELECT card_id FROM cards_db.game_session_cards WHERE session_id = ?)";
   return runQuery(query, [color, sessionId]);
 };
+export const deleteUserFromSession = (playerId, sessionId) => {
+  const query = "DELETE FROM cards_db.game_session_cards WHERE player_id=? and session_id=?";
+  return runQuery(query, [playerId, sessionId]);
+};
 export const getplayedCards = (sessionId) => {
   const query = `
   select * from cards_db.game_session_cards 
