@@ -20,14 +20,13 @@ function MainGame(props){
   const [choosedCard,setChoosedCard] = useState(null)
   const [blackCard,setBlackCard] = useState()
   const {sessionCode} = useParams()
-  let socketConnection = 1
+  const navigate = useNavigate();
   let socket = io.connect(URL, { query: "session_id="+sessionCode});
 
   useEffect(() => {
     getSessionHandler()
     sendNewUser()
   },[sessionCode])
-
 
   socket.on("session", (data) => {
     if(data.type === "update"){
@@ -50,6 +49,9 @@ function MainGame(props){
       if(data.winnerId){
         handleEndJudgeTurn(data)
       }
+      if(data.newTurn){
+        setSession(pre => {return {...pre, turn:data.newTurn}})
+      }
     }
     
   })
@@ -61,13 +63,16 @@ function MainGame(props){
     setSelectedCard([])
     setChoosedCard(null)
     setBlackCard(data.newBlackCard)
-    setSession(pre => {return {...pre, turn:data.newTurn}})
   }
   const refreshCards = async () =>{
       const fetchedcards = await getNewCard({sessionCode})
       updateCards(fetchedcards)
   }
-  
+  const leaveGame = () =>{
+    socket.emit("session", { type:"disconnect", userId: user.id,  sessionId: sessionCode});
+    socket.disconnect()
+    navigate('/')
+  }
   const getSessionHandler = async() =>{
     if(!session?.id){
       const {session,cards,blackCard,playersList,playerStatus,playedCards} = await fetchSessionByCode(sessionCode)
@@ -163,6 +168,13 @@ function MainGame(props){
     )
   }
 
+  const leaveBtnDisplay = () => {
+    return (
+        <div className={style.box} onClick={leaveGame}>
+          leaveGame
+        </div>
+    )
+  }
   const cardsDisplay = () => {
     return (
       <div className={style.cardsCon}>
@@ -187,6 +199,7 @@ function MainGame(props){
     <div className={judgeTurn ?style.judgeCon :style.mainCon}>
       {headerDisplay()}
       {chatDisplay()}
+      {leaveBtnDisplay()}
       <PlayersList 
       playersList={playersList}
       session={session}
