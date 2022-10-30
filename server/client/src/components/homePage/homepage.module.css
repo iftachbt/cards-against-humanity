@@ -16,10 +16,24 @@
 }
 .buttonContainer{
     display: flex;
+    max-width: 215px;
     width: 55%;
     margin: 0 auto;
     position: relative;
     top: 8rem;
-    justify-content: space-around;
+    flex-direction: column;
+}
+.button{
+  padding: 15px;
+  background-color: #515246;
+  color: #dfd6d6;
+  border: solid 1px #515246;
+  border-radius: 7px;
+  margin: 20px 0 20px 0px;
+  cursor: pointer;
+}
+.button:hover{
+  background-color: #fefff3;
+  color: #362c2c;
 }
 

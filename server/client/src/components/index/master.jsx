@@ -15,9 +15,11 @@ import MainGame from "../mainGame/mainGame";
 import CreateGame from "../createGame/createGame";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import LoginSignUp from "../formFilling/loginSignUp";
 
 function Master(){
   const [user, setUser] = useState(false)
+const [state , setState]=useState(true)
 
   const navigate = useNavigate();
 
@@ -44,7 +46,14 @@ function Master(){
         <Header 
           user={user} 
           setUser={setUser} 
+          setState ={setState} 
         />
+      {!user && <LoginSignUp 
+        setUser ={setUser} 
+        user ={user} 
+        state ={state} 
+        setState ={setState} 
+        />}
         <Routes>
             <Route exact path="/" element={
             <HomePage 
@@ -57,16 +66,6 @@ function Master(){
               setUser ={setUser}
               user ={user}
               />}
-             />
-            <Route path="/login" element={
-            <LogIn 
-              setUser ={setUser} 
-              user ={user} />}
-             />
-            <Route path="/signup" element={
-            <SignUp 
-              setUser ={setUser}
-              user ={user}/>}
              />
             <Route path="/joinGame" element={
             <JoinGame 

@@ -166,7 +166,7 @@ const Header = (props) => {
             </Menu>
           </Box>) :(
             <div>
-                <Button onClick={()=>navigate("/login")} color="inherit">Login</Button>
+                <Button onClick={()=> props.setState(true)} color="inherit">Login</Button>
             </div>
             )}
         </Toolbar>

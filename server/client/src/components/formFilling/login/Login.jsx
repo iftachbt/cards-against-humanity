@@ -7,7 +7,7 @@ import TextField  from '../TextField.form';
 import Button from "../submit.btn";
 import {Visibility,VisibilityOff} from '@mui/icons-material';
 import { errToster,toster} from '../../../actions/toastAlert';
-import style from './login.module.css';
+import style from '../loginSignUp.module.css';
 import { validationSchema } from "./login.validate";
 
 function LogIn(props){
@@ -17,9 +17,6 @@ function LogIn(props){
   const handleMouseDownPassword = () => setShowPassword(!showPassword);
 
   const navigate = useNavigate();
-  useEffect(()=>console.log("login"))
-
-  useEffect(() => {if(props.user) navigate("/")})
 
   async function handleClick(values){
       const res = await logIn(values)
@@ -32,8 +29,6 @@ function LogIn(props){
       else errToster("couldn't logIn")
   }
   return(
-      <div className={style.body}>
-      <div className={style.main_container}>
         <div className={style.container}>
           <h1>Login</h1>
           <Formik
@@ -45,7 +40,7 @@ function LogIn(props){
             onSubmit={values => handleClick(values)}
           >            
             <Form>
-            <Grid container spacing={4}>
+            <Grid container spacing={2}>
                 <Grid item xs={12}>
                   <TextField 
                     name="email"
@@ -78,11 +73,9 @@ function LogIn(props){
               </Grid>
             </Form>
           </Formik>
-          <p>still not signIn?</p>
-          <p>register <a onClick={() => navigate('/signup')}>here</a></p>
+          <p>still not signUp?</p>
+          <p>register <a onClick={() => props.setState(false)}>here</a></p>
         </div>
-        </div>
-      </div>
   )
 }
 export default LogIn

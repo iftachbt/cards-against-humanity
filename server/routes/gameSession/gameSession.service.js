@@ -104,7 +104,7 @@ export const endJudgeTurn = async (sessionId, winningCard, blackCardId) => {
 };
 
 export const isGameOver = (playersList) => {
-  return playersList.find((player) => player.win >= 2);
+  return playersList.find((player) => player.win >= 10);
 };
 export const changeJudgeTurn = async (sessionId) => {
   const players = await getPlayerList(sessionId);

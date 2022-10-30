@@ -5,6 +5,7 @@ import 'react-confirm-alert/src/react-confirm-alert.css';
 import { createSession } from "../../actions/gameSession/gameSession";
 import Created from "../createGame/createGame";
 import Join from "../joinGame/joinGame";
+import LogIn from "../formFilling/login/Login";
 
 function HomePage(props){
   const {user} = props
@@ -12,9 +13,6 @@ function HomePage(props){
   const [created,setCreated]=useState(false)
   const navigate = useNavigate();
 
-  useEffect(() => {
-    !user && navigate('/login')
-  })
   const handleClick = async(btn) =>{
     if(btn === "joinGame") setJoin(true)
     if(btn === "createGame") {
@@ -33,11 +31,11 @@ function HomePage(props){
       gameCode={created}
       />}
       <div className={style.buttonContainer}>
-        <div onClick={() => handleClick("joinGame")}>
+        <div className={style.button} onClick={() => handleClick("joinGame")}>
           join game
         </div>
-        <div onClick={() => handleClick("createGame")}>
-          host/create game
+        <div className={style.button} onClick={() => handleClick("createGame")}>
+          host game
         </div>
       </div>
     </div>

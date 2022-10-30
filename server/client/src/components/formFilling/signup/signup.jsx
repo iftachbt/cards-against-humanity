@@ -6,7 +6,7 @@ import { Grid,IconButton,InputAdornment } from '@mui/material';
 import {Visibility,VisibilityOff} from '@mui/icons-material';
 import TextField  from '../TextField.form';
 import Button from "../submit.btn";
-import style from "./signup.module.css";
+import style from "../loginSignUp.module.css";
 import { errToster,toster} from '../../../actions/toastAlert';
 import { validationSchema } from "./signup.validate";
 
@@ -30,8 +30,6 @@ function SignUp(props){
   }
 
   return(
-    <div className={style.body}>
-      <div className={style.main_container}>
         <div className={style.container}>
           <h1>register</h1>
           <Formik
@@ -80,8 +78,6 @@ function SignUp(props){
             </Form>
           </Formik>
         </div>
-      </div>
-    </div>
   )
 }
 export default SignUp
