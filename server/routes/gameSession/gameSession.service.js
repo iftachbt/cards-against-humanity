@@ -29,10 +29,11 @@ export const fetchSession = async (id) => {
   const sessionsList = await getSessionById(id);
   const session = sessionsList[0];
   const playersList = await fetchWins(id);
+  const gameOver = isGameOver(playersList);
   const { playedCards, playerStatus } = await fetchPlayerStatus(id);
   session.turn = playersList[session.turn]?.player_id || 0;
   session.judge = await isRoundDone(id);
-  return { session, playersList, playerStatus, playedCards };
+  return { session, playersList, playerStatus, playedCards, gameOver };
 };
 
 export const fetchWins = async (id) => {
@@ -98,11 +99,12 @@ export const endJudgeTurn = async (sessionId, winningCard, blackCardId) => {
   await addCardToPlayer(blackCardColor, sessionId, newBlackCard.id);
   const playersList = await fetchWins(sessionId);
   const gameOver = isGameOver(playersList);
+  console.log("isGameOver", gameOver);
   return { newBlackCard, newTurn, playersList, gameOver };
 };
 
 export const isGameOver = (playersList) => {
-  return playersList.find((player) => player.win >= 10);
+  return playersList.find((player) => player.win >= 2);
 };
 export const changeJudgeTurn = async (sessionId) => {
   const players = await getPlayerList(sessionId);

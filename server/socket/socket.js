@@ -21,15 +21,15 @@ export function connectSocket(server) {
 
   io.on("connection", (socket) => {
     socket.join(socket.request._query["session_id"]);
+    console.log("socket rooms", io.sockets.adapter.rooms.get(socket.request._query["session_id"]));
     socket.on("session", async (data) => {
       handleChat(socket, data);
-      handleGameEngine(socket, data);
+      handleGameEngine(socket, data, io);
     });
-  });
 
-  io.on("disconnect", (socket) => {
-    socket.leave(socket.request._query["session_id"]);
-    socket.disconnect();
+    socket.on("disconnect", function () {
+      console.log("leave rooms", io.sockets.adapter.rooms.get(socket.request._query["session_id"]));
+    });
   });
 }
 
@@ -65,14 +65,12 @@ const handleGameEngine = async (socket, data) => {
     });
     socket.emit("session", { type: "update", winnerId: data.cardId, newBlackCard, newTurn, playersList, gameOver });
   }
-  if (data.type === "disconnect") {
+  if (data.type === "leaveGame") {
     let newTurn = null;
     if (await isUserTurn(data.sessionId, data.userId)) newTurn = await changeJudgeTurn(data.sessionId);
     const playersList = await removeUserFromGame(data.sessionId, data.userId);
     const cards = await isRoundDone(data.sessionId);
     socket.broadcast.emit("session", { type: "update", playersList, newTurn, selectedCards: cards });
-    socket.leave(socket.request._query["session_id"]);
-    socket.disconnect();
   }
   if (data.type === "kickOutUser") {
     socket.broadcast.emit("session", { type: "update", leave: data.userId });

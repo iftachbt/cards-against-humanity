@@ -12,32 +12,39 @@ function Chat(props){
   const [open,setOpen]=useState(false)
   const [message,setMessage]=useState("")
   const [messagesArray,setMessagesArray]=useState([])
-  const [haventReadMessages,setHaventReadMessages]=useState([])
+  const [seenMsgList,setSeenMsgList]=useState([])
   const [messagesCount,setMessagesCount]=useState(0)
 
   useEffect(() => {
-    setMessagesCount(haventReadMessages.length)
-  }
-    ,[haventReadMessages])
-  socket.on("session", (data) => {
-    if(data.type === "chatList"){
-      setMessagesArray(data.msg)
-      setHaventReadMessages([...haventReadMessages,data.msg])
-    }
-  })
+    initSocketHandler()
+  },[])
+
+  useEffect(() => {
+    if(!open)
+      setMessagesCount(messagesArray.filter(i => !seenMsgList.includes(i.msg_id)).length)
+  },[messagesArray])
 
   useEffect(() => {
     if(!session?.id)return
     socket.emit("session", { type:"getChat",  sessionId: session.id });
   },[session])
 
+  const initSocketHandler = () => {
+    socket.on("session", (data) => {
+      if(data.type === "chatList"){
+        setMessagesArray(data.msg)
+      }
+    })
+  };
+
   const handleDrawerOpen = () => {
+    setSeenMsgList(messagesArray.map(i => i.msg_id))
+    setMessagesCount(0)
     setOpen(true);
   };
 
   const handleDrawerClose = () => {
     setOpen(false);
-    setHaventReadMessages([])
   };
 
   const handleSendMessage = () => {

@@ -15,7 +15,6 @@ function HomePage(props){
   useEffect(() => {
     !user && navigate('/login')
   })
-
   const handleClick = async(btn) =>{
     if(btn === "joinGame") setJoin(true)
     if(btn === "createGame") {

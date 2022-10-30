@@ -6,6 +6,7 @@ import io from "socket.io-client";
 import Chat from "./chat/chat";
 import Judge from "./judgePlayer/judgePlayer";
 import PlayersList from "./playersList/playersList";
+import GameOver from "./gameOver/gameOver";
 
 function MainGame(props){
   const URL = process.env.REACT_APP_SERVER;
@@ -16,53 +17,61 @@ function MainGame(props){
   const [judgeTurn,setJudgeTurn] = useState(false)
   const [cards,setCards] = useState([])
   const [playedStatus,setPlayedStatus] = useState(false)
+  const [gameOverUser,setGameOverUser] = useState(false)
   const [selectedCards,setSelectedCard] = useState([])
   const [choosedCard,setChoosedCard] = useState(null)
+  const [socket,setSocket] = useState(null)
   const [blackCard,setBlackCard] = useState()
   const {sessionCode} = useParams()
   const navigate = useNavigate();
-  let socket = io.connect(URL, { query: "session_id="+sessionCode});
+ 
+  useEffect(() => {
+    initSocketHandler()
+  },[])
 
   useEffect(() => {
+    if(!socket) return 
     getSessionHandler()
     sendNewUser()
-  },[sessionCode])
+  },[sessionCode, socket])
 
-  socket.on("session", (data) => {
-    if(data.type === "update"){
-      if(data.session){
-        setSession(data.session)
+  const initSocketHandler = () => {
+    let socket_ = io.connect(URL, { query: "session_id="+sessionCode});
+    socket_.on("session", (data) => {
+      if(data.type === "update"){
+        if(data.session){
+          setSession(data.session)
+        }
+        if(data.cards){
+          updateCards(data.cards)
+        }
+        if(data.selectedCards){
+          updateSelectedCards(data.selectedCards)
+          setJudgeTurn(true)
+        }
+        if(data.status){
+          setPlayersStatus([...playersStatus, data.status])
+        }
+        if(data.playersList){
+          setPlayersList(data.playersList)
+        }
+        if(data.winnerId){
+          handleEndJudgeTurn(data)
+        }
+        if(data.newTurn){
+          setSession(pre => {return {...pre, turn:data.newTurn}})
+        }
+        if(data.leave){
+          if(data.leave === user.id)leaveGame()
+        }
+        if(data.gameOver){
+          setGameOverUser(data.gameOver)
+        }
       }
-      if(data.cards){
-        updateCards(data.cards)
-      }
-      if(data.selectedCards){
-        updateSelectedCards(data.selectedCards)
-        setJudgeTurn(true)
-      }
-      if(data.status){
-        setPlayersStatus([...playersStatus, data.status])
-      }
-      if(data.playersList){
-        setPlayersList(data.playersList)
-      }
-      if(data.winnerId){
-        handleEndJudgeTurn(data)
-      }
-      if(data.newTurn){
-        setSession(pre => {return {...pre, turn:data.newTurn}})
-      }
-      if(data.leave){
-        if(data.leave === user.id)leaveGame()
-      }
-      if(data.gameOver ){
-        if(data.gameOver.player_id === user.id)alert("you won")
-        else alert(`${data.gameOver.userName} won`)
-        leaveGame()
-      }
-    }
-    
-  })
+    })
+    setSocket(socket_)
+  }
+
   const handleEndJudgeTurn = async(data) => {
     refreshCards()
     setPlayersStatus([])
@@ -77,16 +86,20 @@ function MainGame(props){
       updateCards(fetchedcards)
   }
   const leaveGame = () =>{
-    socket.emit("session", { type:"disconnect", userId:user.id,  sessionId: sessionCode});
-    socket.disconnect()
+    socket.emit("session", { type:"leaveGame", userId:user.id,  sessionId: sessionCode});
     navigate('/')
+    refreshPage()
+  }
+  function refreshPage() {
+    window.location.reload(false);
   }
   const kickOutUser = (userId) =>{
     socket.emit("session", { type:"kickOutUser", userId});
   }
   const getSessionHandler = async() =>{
     if(!session?.id){
-      const {session,cards,blackCard,playersList,playerStatus,playedCards} = await fetchSessionByCode(sessionCode)
+      const {session,cards,blackCard,playersList,playerStatus,playedCards,gameOver} = await fetchSessionByCode(sessionCode)
+      setGameOverUser(gameOver)
       updateCards(cards)
       setSession(session)
       setBlackCard(blackCard)
@@ -131,6 +144,7 @@ function MainGame(props){
   const chooseWinnerHandler = (index) => {
     setChoosedCard(selectedCards[index])
   }
+
   const chatDisplay = () => {
     return (
       <Chat
@@ -140,6 +154,7 @@ function MainGame(props){
        />
     )
   }
+
   const blackCardDisplay = () => {
     return (
       <div className={style.blackCardCon}>
@@ -165,6 +180,7 @@ function MainGame(props){
        </div>
     )
   }
+
   const doneBtnDisplay = () => {
     return (
       <div className={style.doneBtnCon}>
@@ -186,6 +202,7 @@ function MainGame(props){
         </div>
     )
   }
+
   const cardsDisplay = () => {
     return (
       <div className={style.cardsCon}>
@@ -205,9 +222,14 @@ function MainGame(props){
        </div>
     )
   }
-
+  if(!socket)return
   return(
     <div className={judgeTurn ?style.judgeCon :style.mainCon}>
+      {gameOverUser && <GameOver 
+      leaveGame={leaveGame} 
+      winner ={gameOverUser}
+      user ={user}
+      />}
       {headerDisplay()}
       {chatDisplay()}
       {leaveBtnDisplay()}
