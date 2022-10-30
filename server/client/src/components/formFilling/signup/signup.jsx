@@ -20,7 +20,7 @@ function SignUp(props){
 
   async function handleClick(values){
     const res = await signUp(values)
-    if(res.errMsg)return console.log("errMsg",res);
+    if(res.errMsg)return errToster(res.errMsg)
     if(res !== "err"){
         props.setUser(res);
         navigate('/')

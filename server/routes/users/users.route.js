@@ -28,6 +28,7 @@ const signUp = async (req, res) => {
   res.send({ id: req.user.id, userName: req.body.userName, email: req.body.email });
 };
 const logIn = async (req, res) => {
-  if (req.user.id === "ER_DUP_ENTRY") return res.send({ errMsg: "email all ready in use" });
-  res.send({ id: req.user.id, userName: req.body.userName, email: req.body.email });
+  if (req.user.id === "incorrect password" || req.user.id === "incorrect email")
+    return res.send({ errMsg: req.user.id });
+  res.send({ id: req.user.id, userName: req.user.userName, email: req.body.email });
 };
