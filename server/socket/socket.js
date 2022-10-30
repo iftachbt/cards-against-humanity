@@ -47,12 +47,23 @@ const handleGameEngine = async (socket, data) => {
     } else socket.broadcast.emit("session", { type: "update", status: data.userId });
   }
   if (data.type === "winnerCard") {
-    const { newBlackCard, newTurn, playersList } = await endJudgeTurn(data.sessionId, data.cardId, data.blackCardId);
+    const { newBlackCard, newTurn, playersList, gameOver } = await endJudgeTurn(
+      data.sessionId,
+      data.cardId,
+      data.blackCardId
+    );
     const chatList = await addMsg("admin", data.sessionId, data.cardText);
     socket.broadcast.emit("session", { type: "chatList", msg: chatList });
     socket.emit("session", { type: "chatList", msg: chatList });
-    socket.broadcast.emit("session", { type: "update", winnerId: data.cardId, newBlackCard, newTurn, playersList });
-    socket.emit("session", { type: "update", winnerId: data.cardId, newBlackCard, newTurn, playersList });
+    socket.broadcast.emit("session", {
+      type: "update",
+      winnerId: data.cardId,
+      newBlackCard,
+      newTurn,
+      playersList,
+      gameOver,
+    });
+    socket.emit("session", { type: "update", winnerId: data.cardId, newBlackCard, newTurn, playersList, gameOver });
   }
   if (data.type === "disconnect") {
     let newTurn = null;

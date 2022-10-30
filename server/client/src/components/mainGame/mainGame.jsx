@@ -55,6 +55,11 @@ function MainGame(props){
       if(data.leave){
         if(data.leave === user.id)leaveGame()
       }
+      if(data.gameOver ){
+        if(data.gameOver.player_id === user.id)alert("you won")
+        else alert(`${data.gameOver.userName} won`)
+        leaveGame()
+      }
     }
     
   })

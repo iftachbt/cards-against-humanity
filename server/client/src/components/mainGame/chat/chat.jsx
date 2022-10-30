@@ -96,6 +96,7 @@ function Chat(props){
               </div>
             </div>
           )
+          
           })}
         </div>
       <div className={style.textCon} >
