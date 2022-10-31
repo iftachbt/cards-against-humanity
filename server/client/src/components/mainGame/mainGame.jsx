@@ -3,6 +3,7 @@ import style from "./mainGame.module.css"
 import {useNavigate,useParams} from "react-router-dom";
 import { fetchSessionByCode, getNewCard } from "../../actions/gameSession/gameSession";
 import io from "socket.io-client";
+import {Logout} from '@mui/icons-material';
 import Chat from "./chat/chat";
 import Judge from "./judgePlayer/judgePlayer";
 import PlayersList from "./playersList/playersList";
@@ -197,8 +198,8 @@ function MainGame(props){
 
   const leaveBtnDisplay = () => {
     return (
-        <div className={style.box} onClick={() => leaveGame(user.id)}>
-          leaveGame
+        <div className={style.leaveCon} onClick={() => leaveGame(user.id)}>
+          leaveGame <Logout />
         </div>
     )
   }
