@@ -24,7 +24,8 @@ function HomePage(props){
     <div className={style.homePage}>
       <div className={style.background}></div>
       <h1 className={style.h1}>Cards Against Humanity</h1>
-      {join && <Join />}
+      {join && <Join 
+      setJoin={setJoin} />}
       {created && <Created 
       setCreated={setCreated}
       gameCode={created}
