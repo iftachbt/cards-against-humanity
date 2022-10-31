@@ -1,36 +1,44 @@
 import React ,{ useEffect, useState }from "react";
 import style from "./joinGame.module.css"
-import {CopyToClipboard} from 'react-copy-to-clipboard';
+import PinInput from 'react-pin-input';
 import {useNavigate} from "react-router-dom";
 
 function Join(props){
+  const {setJoin} = props
   const URL = window.location.href;
-  const {gameCode,setJoin} = props
-  const [inputCode,setInputCode]=useState("")
+  const [inputCode,setInputCode]=useState(false)
+  const navigate = useNavigate();
 
-  const handleClick = async () =>{
-    setJoin(false)
+  const handleChange = (value, index) =>{
+    console.log("change",value.length );
+    if(value.length === 6) setInputCode(value)
+    else  setInputCode(false)
   }
-  const handleChange = (e) =>{
-    console.log(e.target.value);
-    console.log(inputCode);
-    setInputCode(e.target.value)
-  }
-  const inputConfig ={ onChange: handleChange, className: style.input,type:"number",value :"1", pattern:"[0-9]*" , inputtype:"numeric",required:true}
+  const styleInput={
+    borderColor: 'black',
+    backgroundColor: "#e1ebf3",
+    borderRadius: "4px",
+    width: "6vh",
+    height: "13vh"}
+  const styleCon={
+    padding: '10px' ,
+    display:"flex",
+    justifyContent: "space-around"}
+
   const inputDisplay = () =>{
     return(
-      <form className={style.otc} >
-      <fieldset>
-		      <div>
-		        <input {...inputConfig} value ={inputCode[0]}/>
-		        <input {...inputConfig} value ={inputCode[1]}/>
-		        <input {...inputConfig} value ={inputCode[2]}/>
-		        <input {...inputConfig} value ={inputCode[3]}/>
-		        <input {...inputConfig} value ={inputCode[4]}/>
-		        <input {...inputConfig} value ={inputCode[5]}/>
-          </div>
-	      </fieldset>
-      </form>
+      <PinInput 
+         length={6} 
+         initialValue=""
+         onChange={(value) => {handleChange(value);}} 
+         type="numeric" 
+         inputMode="number"
+         style={styleCon}  
+         inputStyle={styleInput}
+         inputFocusStyle={{borderColor: 'yellow'}}
+         autoSelect={true}
+         regexCriteria={/^[ A-Za-z0-9_@./#&+-]*$/}
+        />
     )
   }
 
@@ -42,10 +50,13 @@ function Join(props){
           {inputDisplay()}
           </div>
       </div>
-      <div >
-        <div className={style.CopyBtn} onClick={() => handleClick()}>
+      <div className={style.btnCon} >
+        <button className={style.Btn} disabled={!inputCode} onClick={() => navigate(`/game/${inputCode}`)}>
           JOIN
-        </div>
+        </button>
+        <button className={style.Btn} onClick={() => setJoin(false)}>
+          BACK
+        </button>
       </div>
     </div>
   )

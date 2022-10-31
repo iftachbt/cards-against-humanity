@@ -11,7 +11,6 @@ function HomePage(props){
   const {user} = props
   const [join,setJoin]=useState(false)
   const [created,setCreated]=useState(false)
-  const navigate = useNavigate();
 
   const handleClick = async(btn) =>{
     if(btn === "joinGame") setJoin(true)
@@ -25,7 +24,8 @@ function HomePage(props){
     <div className={style.homePage}>
       <div className={style.background}></div>
       <h1 className={style.h1}>Cards Against Humanity</h1>
-      {join && <Join />}
+      {join && <Join 
+      setJoin={setJoin} />}
       {created && <Created 
       setCreated={setCreated}
       gameCode={created}

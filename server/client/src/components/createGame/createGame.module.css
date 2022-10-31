@@ -1,36 +1,41 @@
 .con{
-  background-color: #94bbc7;
+  background-color: #758387;
   color: gainsboro;
-  width: 20vw;
+  width: fit-content;
   height: 62vh;
   position: absolute;
-  right: 36vw;
+  min-height: 380px;
+  max-height: 600px;
+  min-width: 260px;
+  right: 0;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
   z-index: 10;
-  padding: 17px 0;
   border-radius: 10px;
-  text-align: center;
 }
 .CopyBtn {
   background-image: -webkit-linear-gradient(top, #D8D8D8, #666767);
-  border-radius: 10px;
+  border-radius: 7px;
   color: #FFFFFF;
-  position: relative;
-  top: 3vh;
   font-family: Georgia;
   font-size: 1vw;
   width: 29%;
+  margin: 1vh auto;
   padding: 8px;
-  text-decoration: none;
-  display: inline-block;
+  cursor: pointer;
 }
 .CopyBtn:hover {
   background-image: -webkit-linear-gradient(top, #545454, #6F6F6F);
   text-decoration: none;
 }
 .URLdiplay{
-  background-color: #767672;
+  background-color: #e1ebf3;
   padding: 13px 0;
+  color: #6c6c6c;
   width: 100%;
+  margin: 25px 0;
 }
 .URLCon{
   display: flex;
@@ -38,11 +43,14 @@
   margin-bottom: 18px;
 }
 .copy{
-  border-top: solid black 1px;
   cursor: pointer;
 }
 .codeCon{
   margin-bottom: 18px;
+}
+.btnDisplay{
+  display: flex;
+  flex-direction: column
 }
 .ORDisplay{
   margin: 16px;

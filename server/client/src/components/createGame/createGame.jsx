@@ -1,13 +1,14 @@
 import React ,{ useEffect, useState }from "react";
 import style from "./createGame.module.css"
 import {CopyToClipboard} from 'react-copy-to-clipboard';
+import Tooltip from '@mui/material/Tooltip';
 import {useNavigate} from "react-router-dom";
-import { createSession } from "../../actions/gameSession/gameSession";
 
 function Created(props){
   const URL = window.location.href;
   const {gameCode,setCreated} = props
   const [copied,setCopied]=useState(false)
+  const navigate = useNavigate();
 
   async function handleClick(){
     setCreated(false)
@@ -22,21 +23,25 @@ function Created(props){
           </div>
           <span className={style.ORDisplay}>OR</span>
           <div className={style.URLCon}>
-          <div className={style.URLdiplay}>{`${URL}game/${gameCode}`}</div>
           {copied 
-          ? <span className={style.URLdiplay} style={{color: 'red'}}>Copied.</span> 
-          : <CopyToClipboard 
-          className={[style.URLdiplay,style.copy].join(" ")}
-          text={`${URL}game/${gameCode}`}
-          onCopy={() =>setCopied(true)}>
-          <span>Copy to clipboard</span>
-          </CopyToClipboard>
+          ? <span className={style.URLdiplay} style={{color: '#9abc6a'}}>Copied.</span> 
+            : <CopyToClipboard 
+           className={[style.URLdiplay,style.copy].join(" ")}
+           text={`${URL}game/${gameCode}`}
+           onCopy={() =>setCopied(true)}>
+          <Tooltip title="click to copy" placement="bottom">
+           <span>{`${URL}game/${gameCode}`}</span>
+          </Tooltip>
+           </CopyToClipboard>
           }
           </div>
       </div>
-      <div >
+      <div className={style.btnDisplay}>
+        <div className={style.CopyBtn} onClick={() => navigate(`/game/${gameCode}`)}>
+          START
+        </div>
         <div className={style.CopyBtn} onClick={() => handleClick()}>
-          GO BACK
+          BACK
         </div>
       </div>
     </div>
