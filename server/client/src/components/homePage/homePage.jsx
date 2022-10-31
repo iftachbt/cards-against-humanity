@@ -11,7 +11,6 @@ function HomePage(props){
   const {user} = props
   const [join,setJoin]=useState(false)
   const [created,setCreated]=useState(false)
-  const navigate = useNavigate();
 
   const handleClick = async(btn) =>{
     if(btn === "joinGame") setJoin(true)
