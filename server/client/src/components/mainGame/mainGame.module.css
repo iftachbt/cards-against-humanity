@@ -15,16 +15,17 @@
   margin: auto;
 }
 .leaveCon{
-  padding: 10px;
-    display: flex;
-    width: -moz-fit-content;
-    width: fit-content;
-    border-radius: 4px;
-    position: relative;
-    margin: auto;
-    bottom: 78px;
-    left: 38vw;
-    background-color: #c21f1f;
+  padding: 4px 16px;
+  display: flex;
+  width: -moz-fit-content;
+  width: fit-content;
+  border-radius: 4px;
+  position: relative;
+  margin: auto;
+  bottom: 56px;
+  left: 63vh;
+  background-color: #c21f1f;
+  cursor: pointer;
 }
 .cardsCon::-webkit-scrollbar {
   width: 2px;

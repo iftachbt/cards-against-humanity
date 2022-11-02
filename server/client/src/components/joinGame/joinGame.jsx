@@ -19,6 +19,7 @@ function Join(props){
     backgroundColor: "#e1ebf3",
     borderRadius: "4px",
     width: "6vh",
+    fontSize: "4vh",
     height: "13vh"}
   const styleCon={
     padding: '10px' ,
@@ -46,7 +47,7 @@ function Join(props){
     <div className={style.con}>
       <div>
         <div className={style.codeCon}>
-          <h1 className={style.h2}>ENTER CODE</h1>
+          <h1 className={style.h1}>ENTER CODE</h1>
           {inputDisplay()}
           </div>
       </div>

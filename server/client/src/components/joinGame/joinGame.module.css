@@ -16,13 +16,14 @@
 }
 .Btn {
   border-radius: 5px;
-  color: #9b9b9b;
+  color: "black";
   border: none;
   font-family: Georgia;
   margin: 3vh 0;
   font-size: 1vw;
   width: 29%;
   padding: 8px;
+  cursor: pointer;
 }
 .Btn:hover {
   background-image: -webkit-linear-gradient(top, #545454, #6F6F6F);
@@ -36,6 +37,9 @@
 }
 .codeCon{
   margin-bottom: 18px;
+}
+.h1{
+  font-size: 5vh;
 }
 
 

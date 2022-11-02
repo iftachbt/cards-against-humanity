@@ -138,7 +138,7 @@ function MainGame(props){
 
   const headerDisplay = () => {
     return (
-      <h1 className={style.title}>{session?.name || "try again"}</h1>
+      <h1 style={{margin:"auto"}} className={style.title}>{session ?(judgeTurn ?"judge Turn" :(session.turn === user.id?"wait for players":"Choose A Card")) : "try again"}</h1>
     )
   }
 
@@ -199,7 +199,9 @@ function MainGame(props){
   const leaveBtnDisplay = () => {
     return (
         <div className={style.leaveCon} onClick={() => leaveGame(user.id)}>
-          leaveGame <Logout />
+          <Logout />
+          <p style={{margin: 0, padding: "4px"}}
+          >leave</p>
         </div>
     )
   }

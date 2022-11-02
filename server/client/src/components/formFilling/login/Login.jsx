@@ -19,14 +19,14 @@ function LogIn(props){
   const navigate = useNavigate();
 
   async function handleClick(values){
-      const res = await logIn(values)
-      if(res.errMsg)return errToster(res.errMsg)
-      if(res !== "err") {
-        props.setUser(res);
-        navigate('/')
-        toster("successfully logIn")
-        }
-      else errToster("couldn't logIn")
+    const res = await logIn(values)
+    if(res.errMsg)return errToster(res.errMsg)
+    if(res !== "err") {
+      props.setUser(res);
+      navigate('/')
+      toster("successfully logIn")
+      }
+    else errToster("couldn't logIn")
   }
   return(
         <div className={style.container}>

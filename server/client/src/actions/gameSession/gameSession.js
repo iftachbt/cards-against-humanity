@@ -15,6 +15,7 @@ export async function updateSession(data) {
 export async function getNewCard(data) {
   return await sendGet("game/session/cards?" + objToStringHandler(data));
 }
+
 const objToStringHandler = (obj) => {
   return Object.keys(obj)
     .map((key) => `${key}=${obj[key]}`)
