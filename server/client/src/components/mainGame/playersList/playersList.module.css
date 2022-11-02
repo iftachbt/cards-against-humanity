@@ -22,3 +22,25 @@
     flex-direction: row;
     justify-content: space-evenly;
 }
+.playerInfo{
+  font-size: 1vw;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  row-gap: 1vh;
+}
+.playerInfo p{
+  margin: 0;
+}
+@media (max-width: 500px) {
+  .playersListCon{
+    width: 55vw;
+    height: 32vh;
+    right: 0;
+    margin: auto;
+    left: 0;
+  }
+  .playerCon{
+    font-size: 5vh;
+  }
+}

@@ -16,8 +16,8 @@
   border-radius:  20px;
 }
 .chatBubbleCon{
-  position: absolute;
-  left: 92vw;
+  position: fixed;
+    right: 16px;
 }
 .messageCon{
   background-color: #ccd8f2 !important;
