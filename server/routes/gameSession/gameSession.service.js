@@ -31,7 +31,7 @@ export const fetchSession = async (id) => {
   const playersList = await fetchWins(id);
   const gameOver = isGameOver(playersList);
   const { playedCards, playerStatus } = await fetchPlayerStatus(id);
-  session.turn ? (session.turn = playersList[session.turn || 0]?.player_id) : null;
+  session.turn = playersList[session.turn || 0]?.player_id;
   session.judge = await isRoundDone(id);
   return { session, playersList, playerStatus, playedCards, gameOver };
 };

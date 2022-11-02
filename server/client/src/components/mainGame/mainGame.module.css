@@ -96,6 +96,12 @@
   border-radius: 6px;
   background: white;
 }
+.noCard p{
+  width: min-content;
+  text-align: center;
+  margin: 5% auto;
+  color: #989c9f;
+}
 
 .blackCardCon{
   width: 100%;

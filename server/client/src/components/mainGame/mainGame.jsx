@@ -35,7 +35,7 @@ function MainGame(props){
     getSessionHandler()
     sendNewUser()
   },[sessionCode, socket])
-
+console.log(session?.turn);
   const initSocketHandler = () => {
     let socket_ = io.connect(URL, { query: "session_id="+sessionCode});
     socket_.on("session", (data) => {
@@ -162,7 +162,7 @@ function MainGame(props){
         <div className={style.blackCardBox}>
           {!judgeTurn 
           ?<div className={choosedCard ?style.card :style.noCard}>
-            {choosedCard && choosedCard.text}
+            {choosedCard ? choosedCard.text :<p>drag a card</p>}
           </div>
           :selectedCards.map((card,index)=> {
             return(
