@@ -1,8 +1,10 @@
 .judgeCon{
   background-color: red;
+  overflow: auto;
 }
 .mainCon{
   background-color: green;
+  overflow: auto;
 }
 .cardsCon{
   overflow: auto;
@@ -20,10 +22,9 @@
   width: -moz-fit-content;
   width: fit-content;
   border-radius: 4px;
-  position: relative;
-  margin: auto;
-  bottom: 56px;
-  left: 63vh;
+  position: absolute;
+  top: 56px;
+  right: 0;
   background-color: #c21f1f;
   cursor: pointer;
 }
