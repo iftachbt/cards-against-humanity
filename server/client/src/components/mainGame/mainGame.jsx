@@ -3,7 +3,7 @@ import style from "./mainGame.module.css"
 import {useNavigate,useParams} from "react-router-dom";
 import { fetchSessionByCode, getNewCard } from "../../actions/gameSession/gameSession";
 import io from "socket.io-client";
-import {Logout} from '@mui/icons-material';
+import {Logout,AddBoxOutlined} from '@mui/icons-material';
 import Chat from "./chat/chat";
 import Judge from "./judgePlayer/judgePlayer";
 import PlayersList from "./playersList/playersList";
@@ -35,7 +35,6 @@ function MainGame(props){
     getSessionHandler()
     sendNewUser()
   },[sessionCode, socket])
-console.log(session?.turn);
   const initSocketHandler = () => {
     let socket_ = io.connect(URL, { query: "session_id="+sessionCode});
     socket_.on("session", (data) => {
@@ -183,13 +182,14 @@ console.log(session?.turn);
   }
 
   const doneBtnDisplay = () => {
+    if(judgeTurn)return
     return (
       <div className={style.doneBtnCon}>
         <div className={style.doneBtnBox}>
           <button 
           disabled={!choosedCard || (choosedCard && playedStatus)} 
           onClick={judgeTurn ?null :handleDoneClick}>
-            done!
+            <AddBoxOutlined />
           </button>
         </div>
        </div>

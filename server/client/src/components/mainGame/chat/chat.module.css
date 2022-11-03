@@ -17,7 +17,8 @@
 }
 .chatBubbleCon{
   position: fixed;
-    right: 16px;
+  right: 16px;
+  top: 100px;
 }
 .messageCon{
   background-color: #ccd8f2 !important;
