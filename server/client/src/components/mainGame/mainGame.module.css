@@ -1,9 +1,7 @@
 .judgeCon{
-  background-color: red;
   overflow: auto;
 }
 .mainCon{
-  background-color: green;
   overflow: auto;
 }
 .cardsCon{
@@ -119,6 +117,20 @@
 }
 .doneBtnBox{
   text-align: center;
+}
+.doneBtnBox button{
+  padding: 4px;
+  margin: auto;
+  border: none;
+  background: #98f180;
+  cursor: pointer;
+  border-radius: 6px;
+  display: flex;
+  font-size: 2vh;
+}
+.doneBtnBox p{
+  margin: auto;
+  padding: 4px;
 }
 @media (max-width: 500px) {
   .card {

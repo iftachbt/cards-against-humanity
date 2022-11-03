@@ -1,5 +1,6 @@
 import React ,{ useEffect, useState }from "react";
 import style from "../mainGame.module.css"
+import { KeyboardTabOutlined } from '@mui/icons-material/';
 
 function Judge(props){
   const {choosedCard,setChoosedCard,blackCardDisplay,sessionCode,blackCard,cards,socket,setJudgeTurn,judgeTurn} = props
@@ -17,7 +18,7 @@ function Judge(props){
           <button 
           disabled={!choosedCard} 
           onClick={handleDoneClick}>
-            done!
+             <p>NEXT</p><KeyboardTabOutlined />
           </button>
         </div>
        </div>
