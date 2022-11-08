@@ -3,7 +3,7 @@ import style from "./mainGame.module.css"
 import {useNavigate,useParams} from "react-router-dom";
 import { fetchSessionByCode, getNewCard } from "../../actions/gameSession/gameSession";
 import io from "socket.io-client";
-import {Logout,AddBoxOutlined} from '@mui/icons-material';
+import {Logout} from '@mui/icons-material';
 import Chat from "./chat/chat";
 import Judge from "./judgePlayer/judgePlayer";
 import PlayersList from "./playersList/playersList";
@@ -35,6 +35,7 @@ function MainGame(props){
     getSessionHandler()
     sendNewUser()
   },[sessionCode, socket])
+
   const initSocketHandler = () => {
     let socket_ = io.connect(URL, { query: "session_id="+sessionCode});
     socket_.on("session", (data) => {
@@ -159,20 +160,9 @@ function MainGame(props){
     return (
       <div className={style.blackCardCon}>
         <div className={style.blackCardBox}>
-          {!judgeTurn 
-          ?<div className={choosedCard ?style.card :style.noCard}>
-            {choosedCard ? choosedCard.text :<p>drag a card</p>}
-          </div>
-          :selectedCards.map((card,index)=> {
-            return(
-            <div 
-            onClick={session?.turn === user.id ?() =>chooseWinnerHandler(index) :null}
-            key={index}
-            className={[style.card,style.white].join(" ")}
-            >
-              {card.text}
-            </div>
-          )})}
+          {(!(session?.turn === user.id) || selectedCards[0])&&<div className={choosedCard ?style.card :style.noCard}>
+            {choosedCard && choosedCard.text}
+          </div>}
           <div className={[style.card,style.black].join(" ")}>
             {blackCard?.text}
           </div>
@@ -182,14 +172,13 @@ function MainGame(props){
   }
 
   const doneBtnDisplay = () => {
-    if(judgeTurn)return
     return (
       <div className={style.doneBtnCon}>
         <div className={style.doneBtnBox}>
           <button 
           disabled={!choosedCard || (choosedCard && playedStatus)} 
           onClick={judgeTurn ?null :handleDoneClick}>
-            <AddBoxOutlined />
+            done!
           </button>
         </div>
        </div>
@@ -210,11 +199,22 @@ function MainGame(props){
     return (
       <div className={style.cardsCon}>
         <div className={style.box}>
-          {cards.map((card,index)=> {
+          {!judgeTurn 
+          ?cards.map((card,index)=> {
             if(choosedCard && card.id === choosedCard.id) return
             return(
             <div 
             onClick={judgeTurn ?null :() =>handleClick(index)}
+            key={index}
+            className={[style.card,style.white].join(" ")}
+            >
+              {card.text}
+            </div>
+          )})
+          :selectedCards.map((card,index)=> {
+            return(
+            <div 
+            onClick={session?.turn === user.id ?() =>chooseWinnerHandler(index) :null}
             key={index}
             className={[style.card,style.white].join(" ")}
             >
@@ -249,6 +249,7 @@ function MainGame(props){
         choosedCard={choosedCard}
         blackCard={blackCard}
         blackCardDisplay={blackCardDisplay}
+        cardsDisplay={cardsDisplay}
         sessionCode={sessionCode}
         cards={cards}
         socket={socket}
