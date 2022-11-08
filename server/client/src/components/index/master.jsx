@@ -16,6 +16,8 @@ import CreateGame from "../createGame/createGame";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import LoginSignUp from "../formFilling/loginSignUp";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 function Master(){
   const [user, setUser] = useState(false)
@@ -62,10 +64,12 @@ const [state , setState]=useState(true)
               />}
              />
             <Route exact path="/game/:sessionCode" element={
-            <MainGame 
-              setUser ={setUser}
-              user ={user}
-              />}
+              <DndProvider backend={HTML5Backend}>
+                <MainGame 
+                  setUser ={setUser}
+                  user ={user}
+                  />
+              </DndProvider>}
              />
             <Route path="/joinGame" element={
             <JoinGame 
