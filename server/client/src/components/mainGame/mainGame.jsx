@@ -8,6 +8,8 @@ import Chat from "./chat/chat";
 import Judge from "./judgePlayer/judgePlayer";
 import PlayersList from "./playersList/playersList";
 import GameOver from "./gameOver/gameOver";
+import Card from "./card/card";
+import { useDrop } from 'react-dnd'
 
 function MainGame(props){
   const URL = process.env.REACT_APP_SERVER;
@@ -25,7 +27,15 @@ function MainGame(props){
   const [blackCard,setBlackCard] = useState()
   const {sessionCode} = useParams()
   const navigate = useNavigate();
- 
+  const [{isOver},drop] = useDrop(() => ({
+    accept : "card",
+    drop : (item)=> {if(!playedStatus){ handleClick(item.index)};console.log(playedStatus);},
+  }));
+  const [{isWinOver},dropWin] = useDrop(() => ({
+    accept : "winCard",
+    drop : (item)=> {chooseWinnerHandler(item.index);console.log(item);},
+  }));
+
   useEffect(() => {
     initSocketHandler()
   },[])
@@ -122,7 +132,7 @@ function MainGame(props){
     setCards(cards);
   }
   const handleClick = (index) =>{
-    if(choosedCard && playedStatus) return
+    if(playedStatus &&choosedCard ) return
     setChoosedCard(cards[index]);
   }
 
@@ -159,9 +169,9 @@ function MainGame(props){
   const blackCardDisplay = () => {
     return (
       <div className={style.blackCardCon}>
-        <div className={style.blackCardBox}>
+        <div className={style.blackCardBox} ref={session?.turn === user.id ?dropWin :drop} >
           {(!(session?.turn === user.id) || selectedCards[0])&&<div className={choosedCard ?style.card :style.noCard}>
-            {choosedCard && choosedCard.text}
+            {choosedCard ? choosedCard.text :<p>drag a card</p>}
           </div>}
           <div className={[style.card,style.black].join(" ")}>
             {blackCard?.text}
@@ -178,7 +188,7 @@ function MainGame(props){
           <button 
           disabled={!choosedCard || (choosedCard && playedStatus)} 
           onClick={judgeTurn ?null :handleDoneClick}>
-            done!
+            DONE
           </button>
         </div>
        </div>
@@ -203,24 +213,12 @@ function MainGame(props){
           ?cards.map((card,index)=> {
             if(choosedCard && card.id === choosedCard.id) return
             return(
-            <div 
-            onClick={judgeTurn ?null :() =>handleClick(index)}
-            key={index}
-            className={[style.card,style.white].join(" ")}
-            >
-              {card.text}
-            </div>
+            <Card card={card} index={index} key={index}/>
           )})
           :selectedCards.map((card,index)=> {
             return(
-            <div 
-            onClick={session?.turn === user.id ?() =>chooseWinnerHandler(index) :null}
-            key={index}
-            className={[style.card,style.white].join(" ")}
-            >
-              {card.text}
-            </div>
-          )})}
+              <Card card={card} index={index} key={index} cardType={true}/>
+            )})}
         </div>
        </div>
     )
