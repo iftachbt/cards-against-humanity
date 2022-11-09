@@ -3,7 +3,9 @@
   "scripts": {
     "test": "vitest --run --reporter verbose",
     "watch": "vitest --reporter verbose",
-    "dev": "nodemon index.js"
+    "server": "nodemon index.js",
+    "client": "npm run start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\" "
   },
   "dependencies": {
     "bcrypt": "^5.0.1",

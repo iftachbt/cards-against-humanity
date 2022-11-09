@@ -25,16 +25,23 @@ function MainGame(props){
   const [choosedCard,setChoosedCard] = useState(null)
   const [socket,setSocket] = useState(null)
   const [blackCard,setBlackCard] = useState()
+  const [dropCardIndex,setDropCardIndex] = useState(null)
   const {sessionCode} = useParams()
   const navigate = useNavigate();
+
   const [{isOver},drop] = useDrop(() => ({
     accept : "card",
-    drop : (item)=> {if(!playedStatus){ handleClick(item.index)};console.log(playedStatus);},
+    drop : (item)=> {setDropCardIndex(item.index)},
   }));
-  const [{isWinOver},dropWin] = useDrop(() => ({
-    accept : "winCard",
-    drop : (item)=> {if(session?.turn === user.id) chooseWinnerHandler(item.index);console.log(item);},
-  }));
+  
+  useEffect(() => {
+    if(dropCardIndex === null) return
+    if(session?.turn === user.id)
+      setChoosedCard(selectedCards[dropCardIndex])
+    else if(session?.turn !== user.id && !playedStatus)
+      setChoosedCard(cards[dropCardIndex]);
+    setDropCardIndex(null)
+  },[dropCardIndex])
 
   useEffect(() => {
     initSocketHandler()
@@ -92,21 +99,26 @@ function MainGame(props){
     setChoosedCard(null)
     setBlackCard(data.newBlackCard)
   }
+
   const refreshCards = async () =>{
       const fetchedcards = await getNewCard({sessionCode})
       updateCards(fetchedcards)
   }
+
   const leaveGame = () =>{
     socket.emit("session", { type:"leaveGame", userId:user.id,  sessionId: sessionCode});
     navigate('/')
     refreshPage()
   }
+
   function refreshPage() {
     window.location.reload(false);
   }
+
   const kickOutUser = (userId) =>{
     socket.emit("session", { type:"kickOutUser", userId});
   }
+
   const getSessionHandler = async() =>{
     if(!session?.id){
       const {session,cards,blackCard,playersList,playerStatus,playedCards,gameOver} = await fetchSessionByCode(sessionCode)
@@ -120,9 +132,11 @@ function MainGame(props){
       if(session.judge) setSelectedCard(playedCards)
     }
   }
+
   const updateSelectedCards = (cards) =>{
     setSelectedCard(cards);
   }
+  
   const updateCards = (cards) =>{
     const selectedCard = cards.filter(c => c.status === "play")
     if(selectedCard.length){
@@ -131,17 +145,14 @@ function MainGame(props){
     }
     setCards(cards);
   }
-  const handleClick = (index) =>{
-    if(playedStatus &&choosedCard ) return
-    setChoosedCard(cards[index]);
-  }
+
 
   const handleDoneClick = () =>{
-    socket.emit("session", { type:"cardSelected", userId: user.id,  sessionId: sessionCode ,cardId:choosedCard.card_id
-  });
+    socket.emit("session", { type:"cardSelected", userId: user.id,  sessionId: sessionCode ,cardId:choosedCard.card_id });
     setChoosedCard(choosedCard)
     setPlayedStatus(true)
   }
+
   const sendNewUser = () =>{
     socket.emit("session", { type:"newUser", userId: user.id,  sessionId: sessionCode});
   }
@@ -152,9 +163,6 @@ function MainGame(props){
     )
   }
 
-  const chooseWinnerHandler = (index) => {
-    setChoosedCard(selectedCards[index])
-  }
 
   const chatDisplay = () => {
     return (
@@ -169,7 +177,7 @@ function MainGame(props){
   const blackCardDisplay = () => {
     return (
       <div className={style.blackCardCon}>
-        <div className={style.blackCardBox} ref={session?.turn === user.id ?dropWin :drop} >
+        <div className={style.blackCardBox} ref={drop} >
           {(!(session?.turn === user.id) || selectedCards[0])&&<div className={choosedCard ?style.card :style.noCard}>
             {choosedCard ? choosedCard.text :<p>drag a card</p>}
           </div>}
@@ -217,29 +225,32 @@ function MainGame(props){
           )})
           :selectedCards.map((card,index)=> {
             return(
-              <Card card={card} index={index} key={index} cardType={true}/>
+              <Card card={card} index={index} key={index}/>
             )})}
         </div>
        </div>
     )
   }
+
   if(!socket)return
+
   return(
     <div className={judgeTurn ?style.judgeCon :style.mainCon}>
-      {gameOverUser && <GameOver 
-      leaveGame={leaveGame} 
-      winner ={gameOverUser}
-      user ={user}
+      {gameOverUser && 
+      <GameOver 
+        leaveGame={leaveGame} 
+        winner ={gameOverUser}
+        user ={user}
       />}
       {headerDisplay()}
       {chatDisplay()}
       {leaveBtnDisplay()}
       <PlayersList 
-      playersList={playersList}
-      session={session}
-      user={user}
-      playersStatus={playersStatus}
-      kickOutUser={kickOutUser}
+        playersList={playersList}
+        session={session}
+        user={user}
+        playersStatus={playersStatus}
+        kickOutUser={kickOutUser}
       />
       {session?.turn === user.id
       ?<Judge 
