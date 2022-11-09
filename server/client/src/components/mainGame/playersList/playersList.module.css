@@ -1,6 +1,6 @@
 .playersListCon{
   width: 13vw;
-  min-width: 150px;
+  min-width: 186px;
   max-height: 26vh;
   background-color: #d1c2d8;
   overflow: auto;
@@ -13,21 +13,36 @@
   border-radius: 2px;
   align-items: center;
 }
+.playersListCon::-webkit-scrollbar {
+  width: 2px;
+  height: 9px;
+}
+
+.playersListCon::-webkit-scrollbar-track {
+  background: #ccd8f2;
+}
+
+.playersListCon::-webkit-scrollbar-thumb {
+  background-color: #6b717e;
+  border-radius: 10px;
+  border: 3px solid #ccd8f2;
+}
 .playerCon{
   width: 90%;
   height: 5vh;
   margin: 0px 0px 6px 0;
   background-color: rgb(255 255 255);
-  font-size: 1vw;
+  font-size: 2vh;
   padding: 3px;
   border-radius: 2px;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: flex-start;
   display: flex;
 }
 .picSection{
   height: 5vh;
   width: 5vh;
+  margin: 0 2vh 0 0
 }
 
 .pic{
@@ -48,6 +63,47 @@
   width: 7vw;
 
 }
+.nameCon{
+  display: flex;
+  width: fit-content;
+  max-width: 34vw;
+  justify-content: space-between;
+}
+.name{
+
+}
+.options {
+  background-color: #ffa5a5;
+  width: fit-content;
+  cursor: pointer;
+  position: absolute;
+  left: 89%;
+  
+}
+.statusCon {
+  display: flex;
+  width: 13vh;
+  max-width: 34vw;
+  justify-content: space-around;
+}
+.status {
+
+}
+.wins {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: auto;
+  position: relative;
+  bottom: 11px;
+  font-size: 2vh;
+}
+.crownImg{
+  background-image: url("./assets/crown.png");
+  background-size: contain;
+  width: 3vh;
+  height: 3vh;
+}
 
 .playerInfo{
   font-size: 1vw;
@@ -59,7 +115,7 @@
 .playerInfo p{
   margin: 0;
 }
-@media (max-width: 500px) {
+@media (max-width: 650px) {
   .playersListCon{
     width: 55vw;
     height: 32vh;
@@ -69,5 +125,8 @@
   }
   .playerInfo{
     font-size: 4vw;
+  }
+  .wins{
+  bottom: 18px;
   }
 }
