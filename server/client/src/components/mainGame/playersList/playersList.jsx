@@ -1,5 +1,5 @@
 import React ,{ useEffect, useState }from "react";
-import {Gavel,QueryBuilder,Done,Logout,People,ChevronLeft} from '@mui/icons-material';
+import { Clear,People,ChevronLeft} from '@mui/icons-material';
 import style from "./playersList.module.css"
 
 function PlayersList(props){
@@ -44,13 +44,12 @@ function PlayersList(props){
               </div>
             </div>
             <div className={style.infoSection}>
-              {/*info*/}
               <div className={style.nameCon}>
                 <div className={style.name}>
                   {player.userName}
                 </div>
                 <div className={style.options}>
-                  <Logout onClick={() => {kickOutUser(player.player_id)}}/>
+                {session?.host_id === user.id &&!(player.player_id === user.id)&&<Clear sx={{ fontSize: 10 }} onClick={() => kickOutUser(player.player_id)}/>}
                 </div>
               </div>
               <div className={style.statusCon}>
@@ -58,16 +57,11 @@ function PlayersList(props){
                   {getStatusText(player)}
                 </div>
                 <div className={style.wins}>
-                  {player.win}
+                  <div className={style.crownImg}></div>
+                    {player.win}
                 </div>
               </div>
             </div>
-            {/*
-            {session?.host_id === user.id &&!(player.player_id === user.id)&&<Logout onClick={() =>kickOutUser(player.player_id)}/>}
-            <div className={style.playerInfo}><p>WIN:</p> {player.win}</div>
-            <div className={style.playerInfo}><p>NAME:</p> {player.userName}</div>
-            {icon(player)}
-            */}
           </div>
         )
       })}
