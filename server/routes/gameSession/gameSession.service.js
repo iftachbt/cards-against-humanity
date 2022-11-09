@@ -47,7 +47,7 @@ export const fetchWins = async (id) => {
 };
 export const fetchBlackCard = async (id) => {
   const card = await getSessionBlackCard(id);
-  return card[0];
+  return card[card?.length - 1];
 };
 const fetchPlayerStatus = async (id) => {
   const playedCards = await getplayedCards(id);
