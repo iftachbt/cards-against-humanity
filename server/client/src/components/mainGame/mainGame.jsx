@@ -33,7 +33,7 @@ function MainGame(props){
   }));
   const [{isWinOver},dropWin] = useDrop(() => ({
     accept : "winCard",
-    drop : (item)=> {chooseWinnerHandler(item.index);console.log(item);},
+    drop : (item)=> {if(session?.turn === user.id) chooseWinnerHandler(item.index);console.log(item);},
   }));
 
   useEffect(() => {
