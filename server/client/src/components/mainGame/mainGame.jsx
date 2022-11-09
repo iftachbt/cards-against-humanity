@@ -159,7 +159,7 @@ function MainGame(props){
 
   const headerDisplay = () => {
     return (
-      <h1 style={{margin:"auto"}} className={style.title}>{session ?(judgeTurn ?"judge Turn" :(session.turn === user.id?"wait for players":"Choose A Card")) : "try again"}</h1>
+      <h1 style={{margin:"auto"}} className={style.title}>{session ?(judgeTurn ?"judge Turn" :(session.turn === user.id?<p>you are the judge</p>:"Choose A Card")) : "try again"}</h1>
     )
   }
 

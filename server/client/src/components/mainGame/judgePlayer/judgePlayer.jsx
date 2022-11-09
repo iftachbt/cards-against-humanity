@@ -34,7 +34,13 @@ function Judge(props){
         {doneBtnDisplay()}
         {cardsDisplay()}
       </div>
-      :<div className={style.circularPro}><CircularProgress color="inherit" /></div>
+      :(
+      <div>
+        <div className={style.circularPro}><CircularProgress color="inherit" />
+        <p>waiting for players<br/>to put a Card</p>
+        </div>
+      </div>
+      )
       }
       
     </div>
