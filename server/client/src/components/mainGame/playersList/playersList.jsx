@@ -14,7 +14,7 @@ function PlayersList(props){
   }
 
   const handleResize =() =>{
-    if(window.innerWidth <= 500) setSmallPageSize(true)
+    if(window.innerWidth <= 650) setSmallPageSize(true)
     else setSmallPageSize(false)
   }
 
@@ -48,17 +48,17 @@ function PlayersList(props){
                 <div className={style.name}>
                   {player.userName}
                 </div>
-                <div className={style.options}>
+                <span className={style.options}>
                 {session?.host_id === user.id &&!(player.player_id === user.id)&&<Clear sx={{ fontSize: 10 }} onClick={() => kickOutUser(player.player_id)}/>}
-                </div>
+                </span>
               </div>
               <div className={style.statusCon}>
-                <div className={style.status} onClick={() => {console.log(player);}}>
+                <div className={style.status}>
                   {getStatusText(player)}
                 </div>
                 <div className={style.wins}>
                   <div className={style.crownImg}></div>
-                    {player.win}
+                  <p>{player.win}</p>
                 </div>
               </div>
             </div>

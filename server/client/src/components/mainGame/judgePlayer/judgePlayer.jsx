@@ -7,7 +7,8 @@ function Judge(props){
   const {choosedCard,cardsDisplay,setChoosedCard,blackCardDisplay,sessionCode,blackCard,cards,socket,setJudgeTurn,judgeTurn} = props
 
   const handleDoneClick = () =>{
-    socket.emit("session", { type:"winnerCard",cards , sessionId: sessionCode ,cardId:choosedCard.card_id,cardText:choosedCard.text,blackCardId:blackCard?.card_id});
+    console.log("choosedCard",choosedCard);
+    socket.emit("session", { type:"winnerCard",cards , sessionId: sessionCode ,playerId: choosedCard.player_id ,cardId:choosedCard.card_id,cardText:choosedCard.text,blackCardId:blackCard?.card_id});
     setJudgeTurn(false)
     setChoosedCard(null)
   }
@@ -17,6 +18,7 @@ function Judge(props){
       <div className={style.doneBtnCon}>
         <div className={style.doneBtnBox}>
           <button 
+          className={style.flex}
           disabled={!choosedCard} 
           onClick={handleDoneClick}>
              <p>NEXT</p><KeyboardTabOutlined />
@@ -34,7 +36,13 @@ function Judge(props){
         {doneBtnDisplay()}
         {cardsDisplay()}
       </div>
-      :<div className={style.circularPro}><CircularProgress color="inherit" /></div>
+      :(
+      <div>
+        <div className={style.circularPro}><CircularProgress color="inherit" />
+        <p>waiting for players<br/>to put a Card</p>
+        </div>
+      </div>
+      )
       }
       
     </div>

@@ -94,9 +94,15 @@
   flex-direction: column;
   align-items: center;
   margin: auto;
-  position: relative;
-  bottom: 11px;
+  position: absolute;
+  left: 84%;
   font-size: 2vh;
+}
+.wins p{
+  position: relative;
+  margin: auto;
+  bottom: 23px;
+  z-index: 20;
 }
 .crownImg{
   background-image: url("./assets/crown.png");
@@ -126,7 +132,5 @@
   .playerInfo{
     font-size: 4vw;
   }
-  .wins{
-  bottom: 18px;
-  }
+  
 }

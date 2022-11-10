@@ -159,7 +159,7 @@ function MainGame(props){
 
   const headerDisplay = () => {
     return (
-      <h1 style={{margin:"auto"}} className={style.title}>{session ?(judgeTurn ?"judge Turn" :(session.turn === user.id?"wait for players":"Choose A Card")) : "try again"}</h1>
+      <h1 style={{margin:"auto"}} className={style.title}>{session ?(judgeTurn ?"judge Turn" :(session.turn === user.id?<p>you are the judge</p>:"Choose A Card")) : "try again"}</h1>
     )
   }
 
@@ -179,7 +179,7 @@ function MainGame(props){
       <div className={style.blackCardCon}>
         <div className={style.blackCardBox} ref={drop} >
           {(!(session?.turn === user.id) || selectedCards[0])&&<div className={choosedCard ?style.card :style.noCard}>
-            {choosedCard ? choosedCard.text :<p>drag a card</p>}
+            {choosedCard ? choosedCard.text :<p>drag\click a card</p>}
           </div>}
           <div className={[style.card,style.black].join(" ")}>
             {blackCard?.text}
@@ -221,11 +221,11 @@ function MainGame(props){
           ?cards.map((card,index)=> {
             if(choosedCard && card.id === choosedCard.id) return
             return(
-            <Card card={card} index={index} key={index}/>
+            <Card card={card} index={index} key={index} setDropCardIndex={setDropCardIndex}/>
           )})
           :selectedCards.map((card,index)=> {
             return(
-              <Card card={card} index={index} key={index}/>
+              <Card card={card} index={index} key={index} setDropCardIndex={setDropCardIndex}/>
             )})}
         </div>
        </div>

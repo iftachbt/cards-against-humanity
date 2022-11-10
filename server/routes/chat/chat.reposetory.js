@@ -1,8 +1,8 @@
 import { runQuery } from "../../mongoDB/DB.js";
 
 export const insert = (data) => {
-  const query = "INSERT INTO cards_db.chat(msg,player_id,session_id) values (?,?,?)";
-  return runQuery(query, [data.msg, data.userId, data.sessionId]);
+  const query = "INSERT INTO cards_db.chat(msg,player_id,session_id,winner) values (?,?,?,?)";
+  return runQuery(query, [data.msg, data.userId, data.sessionId, data.winner]);
 };
 export const getChatBySessionId = (sessionId) => {
   const query =
