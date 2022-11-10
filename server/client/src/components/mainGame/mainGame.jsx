@@ -179,7 +179,7 @@ function MainGame(props){
       <div className={style.blackCardCon}>
         <div className={style.blackCardBox} ref={drop} >
           {(!(session?.turn === user.id) || selectedCards[0])&&<div className={choosedCard ?style.card :style.noCard}>
-            {choosedCard ? choosedCard.text :<p>drag a card</p>}
+            {choosedCard ? choosedCard.text :<p>drag\click a card</p>}
           </div>}
           <div className={[style.card,style.black].join(" ")}>
             {blackCard?.text}
@@ -221,11 +221,11 @@ function MainGame(props){
           ?cards.map((card,index)=> {
             if(choosedCard && card.id === choosedCard.id) return
             return(
-            <Card card={card} index={index} key={index}/>
+            <Card card={card} index={index} key={index} setDropCardIndex={setDropCardIndex}/>
           )})
           :selectedCards.map((card,index)=> {
             return(
-              <Card card={card} index={index} key={index}/>
+              <Card card={card} index={index} key={index} setDropCardIndex={setDropCardIndex}/>
             )})}
         </div>
        </div>

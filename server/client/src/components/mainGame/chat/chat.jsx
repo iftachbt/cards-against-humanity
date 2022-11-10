@@ -92,13 +92,18 @@ function Chat(props){
         <div className={style.messageCon}>
           {messagesArray.map((chat) => {
             const msgStyle = [style.msg,chat.player_id===user.id ?style.self :style.players].join(" ")
+            if(chat.playerName)console.log(chat.playerName);
           return (
             <div className={msgStyle} key={`${chat.msg_id}`}>
               <div>
                 <span  className={style.nameTag}>{chat.player_id===user.id ?"me":chat.userName}</span>
-                <Typography paragraph>
-                  {chat.msg}
-                </Typography>
+                  {chat.winner && (
+                  <div className={style.winCon}>
+                    <p>the winner: {chat.winner}</p>
+                    </div>)}
+                  <Typography paragraph>
+                    {chat.msg}
+                  </Typography>
                 <span>{moment(chat.ts).format("HH:mm")}</span>
               </div>
             </div>

@@ -127,11 +127,16 @@
   padding: 4px;
   margin: auto;
   border: none;
+  width: 7vw;
+  min-width: 90px;
+  height: 5vh;
   background: #98f180;
   cursor: pointer;
   border-radius: 6px;
-  display: flex;
   font-size: 2vh;
+}
+.flex{
+  display: flex;
 }
 .doneBtnBox p{
   margin: auto;
