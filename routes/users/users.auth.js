@@ -1,6 +1,6 @@
 import "dotenv/config";
 import LocalStrategy from "passport-local";
-import { sessionStore } from "../../mongoDB/DB.js";
+import { sessionStore } from "../../DB/DB.js";
 import { UnAuthriseError } from "../../error_handling/error.class.js";
 import bcrypt from "bcrypt";
 import { getPassByEmail, getUserByEmail, getUserById, insert } from "../users/users.reposetory.js";

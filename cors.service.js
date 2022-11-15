@@ -1,4 +1,4 @@
-const whitelist = ["http://localhost:3000", "http://localhost"];
+const whitelist = ["http://localhost:3000", "http://localhost", "https://peaceful-sierra-66868.herokuapp.com/"];
 export const corsOptions = {
   credentials: true,
   origin: (origin, callback) => {
