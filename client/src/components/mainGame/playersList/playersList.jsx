@@ -1,4 +1,4 @@
-import React ,{ useEffect, useState }from "react";
+import React ,{  useState }from "react";
 import { Clear,People,ChevronLeft} from '@mui/icons-material';
 import style from "./playersList.module.css"
 

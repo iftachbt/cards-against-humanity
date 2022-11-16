@@ -2,6 +2,8 @@ import React ,{ useEffect, useState }from "react";
 import style from "./joinGame.module.css"
 import PinInput from 'react-pin-input';
 import {useNavigate} from "react-router-dom";
+import { Clear } from '@mui/icons-material';
+
 
 function Join(props){
   const {setJoin} = props
@@ -18,7 +20,7 @@ function Join(props){
     borderColor: 'black',
     backgroundColor: "#e1ebf3",
     borderRadius: "4px",
-    width: "6vh",
+    width: "16%",
     fontSize: "4vh",
     height: "13vh"}
   const styleCon={
@@ -47,6 +49,9 @@ function Join(props){
     <div className={style.con}>
       <div>
         <div className={style.codeCon}>
+          <div className={style.exit}>
+            <Clear onClick={() => setJoin(false)} />
+          </div>
           <h1 className={style.h1}>ENTER CODE</h1>
           {inputDisplay()}
           </div>
@@ -54,9 +59,6 @@ function Join(props){
       <div className={style.btnCon} >
         <button className={style.Btn} disabled={!inputCode} onClick={() => navigate(`/game/${inputCode}`)}>
           JOIN
-        </button>
-        <button className={style.Btn} onClick={() => setJoin(false)}>
-          BACK
         </button>
       </div>
     </div>

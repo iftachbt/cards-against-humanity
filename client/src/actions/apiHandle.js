@@ -3,6 +3,7 @@ import axios from "axios";
 const URL = process.env.REACT_APP_SERVER;
 
 export async function sendPost(route, body) {
+  console.log("route", URL, route);
   console.log("route", route);
   try {
     const res = await axios.post(URL + route, body, {

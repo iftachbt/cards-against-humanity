@@ -29,13 +29,21 @@ app.use(session(sessionConfig()));
 app.use(passport.initialize());
 app.use(passport.session());
 
-if (process.env.ENV === "PROD") {
-  console.log("PROD");
-  app.use(express.static(path.join(__dirname, "client", "build")));
-}
 const port = process.env.PORT || 4000;
 
 connectRoutes(app);
 connectSocket(server);
+
+if (process.env.ENV === "PROD") {
+  console.log("PROD");
+  app.use(express.static(path.join(__dirname, "client", "build")));
+  app.get("/*", function (req, res) {
+    res.sendFile(path.join(__dirname, "client", "build", "index.html"), function (err) {
+      if (err) {
+        res.status(500).send(err);
+      }
+    });
+  });
+}
 
 server.listen(port, () => console.log(`Listening on port ${port}`));
