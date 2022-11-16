@@ -19,7 +19,6 @@ GameSessionRoute.get("/session", async (req, res, next) => getSessionHandler(req
 GameSessionRoute.get("/session/cards", async (req, res, next) => getNewWhiteCard(req, res).catch((err) => next(err)));
 
 const createSessionHandler = async (req, res) => {
-  console.log(req.user);
   const result = await createSession(req.user.id);
   res.send(result);
 };

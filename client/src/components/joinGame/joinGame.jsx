@@ -57,9 +57,9 @@ function Join(props){
           </div>
       </div>
       <div className={style.btnCon} >
-        <div className={style.Btn} disabled={!inputCode} onClick={() => navigate(`/game/${inputCode}`)}>
+        <button className={style.Btn} disabled={!inputCode} onClick={() => navigate(`/game/${inputCode}`)}>
           JOIN
-        </div>
+        </button>
       </div>
     </div>
   )
