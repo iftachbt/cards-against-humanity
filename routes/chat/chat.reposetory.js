@@ -5,6 +5,9 @@ export const insert = (data) => {
   return runQuery(query, [data.msg, data.userId, data.sessionId, data.winner]);
 };
 export const getChatBySessionId = (sessionId) => {
-  const query = `select * from ${process.env.DB_NAME}.chat left join ${process.env.DB_NAME}.user on ${process.env.DB_NAME}.chat.player_id = ${process.env.DB_NAME}.user.id where session_id = ?`;
+  const query = `select * from ${process.env.DB_NAME}.chat 
+  left join ${process.env.DB_NAME}.user on ${process.env.DB_NAME}.chat.player_id = ${process.env.DB_NAME}.user.id 
+  where session_id = ? 
+  ORDER BY ts DESC`;
   return runQuery(query, [sessionId]);
 };
