@@ -1,8 +1,8 @@
 import { runQuery } from "../../DB/DB.js";
 
 export const insert = (data) => {
-  const query = `INSERT INTO ${process.env.DB_NAME}.chat(msg,player_id,session_id,winner) values (?,?,?,?)`;
-  return runQuery(query, [data.msg, data.userId, data.sessionId, data.winner]);
+  const query = `INSERT INTO ${process.env.DB_NAME}.chat(msg,player_id,session_id,winner,msg2) values (?,?,?,?,?)`;
+  return runQuery(query, [data.msg, data.userId, data.sessionId, data.winner, data.blackText]);
 };
 export const getChatBySessionId = (sessionId) => {
   const query = `select * from ${process.env.DB_NAME}.chat 

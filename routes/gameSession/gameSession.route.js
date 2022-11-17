@@ -26,7 +26,6 @@ const getSessionHandler = async (req, res) => {
   const cards = await fetchPlayerCards(req.query.code, req.user.id);
   const { session, playersList, playerStatus, playedCards, gameOver } = await fetchSession(req.query.code);
   const blackCard = await fetchBlackCard(req.query.code);
-  console.log("blackCard", blackCard);
   res.send({ session, cards, blackCard, playersList, playerStatus, playedCards, gameOver });
 };
 const getNewWhiteCard = async (req, res) => {

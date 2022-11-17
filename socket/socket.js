@@ -58,7 +58,7 @@ const handleGameEngine = async (socket, data) => {
       data.blackCardId
     );
     const winnerPlayerName = playersList.find((player) => player.player_id === data.playerId).userName;
-    let chatList = await addMsg("admin", data.sessionId, data.cardText, winnerPlayerName);
+    let chatList = await addMsg("admin", data.sessionId, data.cardText, winnerPlayerName, data.blackCardId);
     socket.broadcast.emit("session", { type: "chatList", msg: chatList });
     socket.emit("session", { type: "chatList", msg: chatList });
     socket.broadcast.emit("session", {

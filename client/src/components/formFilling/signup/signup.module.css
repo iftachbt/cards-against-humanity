@@ -13,7 +13,9 @@
   height: 100%;
   width: 75%;
   margin: 0 auto;
-  right: 11%
+  right: 11%;
+  text-align: center;
+
 }
 .container{
   position: relative;

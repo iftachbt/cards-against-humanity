@@ -95,3 +95,7 @@ export const discardPlayedCards = (sessionId) => {
   const query = `UPDATE ${process.env.DB_NAME}.game_session_cards SET status = ? where session_id=? and status=?`;
   return runQuery(query, [statusMap.USE, sessionId, statusMap.PLAY]);
 };
+export const getCardById = (cardId) => {
+  const query = `select * from ${process.env.DB_NAME}.cards WHERE id = ?`;
+  return runQuery(query, [cardId]);
+};
