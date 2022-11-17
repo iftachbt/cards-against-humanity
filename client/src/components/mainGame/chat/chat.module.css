@@ -27,6 +27,8 @@
   width: 96%;
   border-radius: 8px;
   overflow: auto;
+  display: flex;
+  flex-direction: column-reverse;
 }
 .messageCon::-webkit-scrollbar {
   width: 9px;
