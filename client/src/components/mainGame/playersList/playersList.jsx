@@ -1,4 +1,4 @@
-import React ,{  useState }from "react";
+import React ,{  useEffect, useState }from "react";
 import { Clear,People,ChevronLeft} from '@mui/icons-material';
 import style from "./playersList.module.css"
 
@@ -6,6 +6,8 @@ function PlayersList(props){
   const {user,playersList,session,playersStatus,kickOutUser} = props
   const [playerListBtn,setPlayerListBtn] = useState(true)
   const [smallPageSize,setSmallPageSize] = useState(false)
+
+  useEffect(() => handleResize(),[])
 
   const getStatusText = (player) =>{
     if(player.player_id === session?.turn) return "the judge!"
