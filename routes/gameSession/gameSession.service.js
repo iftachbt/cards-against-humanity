@@ -49,7 +49,7 @@ export const fetchBlackCard = async (id) => {
   const card = await getSessionBlackCard(id);
   return card[card?.length - 1];
 };
-const fetchPlayerStatus = async (id) => {
+export const fetchPlayerStatus = async (id) => {
   const playedCards = await getplayedCards(id);
   const playerStatus = [...playedCards].map((ele) => ele.player_id);
   return { playedCards, playerStatus };

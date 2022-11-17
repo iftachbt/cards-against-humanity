@@ -86,9 +86,6 @@
   width: 6vh;
   height: 6vh;
 }
-.textField{
-
-}
 .nameTag{
   text-decoration: underline;
   font-weight: bold;
@@ -100,14 +97,4 @@
   border: solid 1px #585353;
   border-radius: 3px;
   padding: 2px;
-}
-.crownImg{
-  background-image: url("../playersList/assets/crown.png");
-  background-size: cover;
-  background-repeat: round;
-  width: fit-content;
-  text-align: center;
-  position: relative;
-  height: 27px;
-  right: 42px;
 }

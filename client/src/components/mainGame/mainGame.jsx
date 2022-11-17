@@ -53,6 +53,10 @@ function MainGame(props){
     sendNewUser()
   },[sessionCode, socket])
 
+  const changeStatus = status => {
+    setPlayersStatus(status)
+  }
+
   const initSocketHandler = () => {
     let socket_ = io.connect(URL, { query: "session_id="+sessionCode});
     socket_.on("session", (data) => {
@@ -68,7 +72,7 @@ function MainGame(props){
           setJudgeTurn(true)
         }
         if(data.status){
-          setPlayersStatus([...playersStatus, data.status])
+          changeStatus(data.status)
         }
         if(data.playersList){
           setPlayersList(data.playersList)

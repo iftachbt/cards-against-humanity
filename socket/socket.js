@@ -5,6 +5,7 @@ import {
   changeCardStatus,
   changeJudgeTurn,
   endJudgeTurn,
+  fetchPlayerStatus,
   fetchSession,
   isRoundDone,
   isUserTurn,
@@ -41,10 +42,14 @@ const handleGameEngine = async (socket, data) => {
   if (data.type === "cardSelected") {
     await changeCardStatus("play", data.sessionId, data.cardId);
     const cards = await isRoundDone(data.sessionId);
+    const { playerStatus } = await fetchPlayerStatus(data.sessionId);
     if (cards) {
-      socket.emit("session", { type: "update", selectedCards: cards, status: data.userId });
-      socket.broadcast.emit("session", { type: "update", selectedCards: cards, status: data.userId });
-    } else socket.broadcast.emit("session", { type: "update", status: data.userId });
+      socket.emit("session", { type: "update", selectedCards: cards, status: playerStatus });
+      socket.broadcast.emit("session", { type: "update", selectedCards: cards, status: playerStatus });
+    } else {
+      socket.broadcast.emit("session", { type: "update", status: playerStatus });
+      socket.emit("session", { type: "update", status: playerStatus });
+    }
   }
   if (data.type === "winnerCard") {
     const { newBlackCard, newTurn, playersList, gameOver } = await endJudgeTurn(
