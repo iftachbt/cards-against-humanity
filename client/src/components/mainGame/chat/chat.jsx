@@ -2,9 +2,7 @@ import React ,{ useEffect, useState }from "react";
 import style from "./chat.module.css"
 import moment from "moment"
 import {IconButton,Drawer,Divider,Typography} from '@mui/material/';
-import {ChevronRight,ChevronLeft,Send,ChatBubbleOutlineOutlined} from '@mui/icons-material/';
-// import ChevronLeft from '@mui/icons-material/ChevronLeft';
-
+import {ChevronRight,Send,ChatBubbleOutlineOutlined} from '@mui/icons-material/';
 
 function Chat(props){
   const {user,session,socket} = props
@@ -92,18 +90,25 @@ function Chat(props){
         <div className={style.messageCon}>
           {messagesArray.map((chat) => {
             const msgStyle = [style.msg,chat.player_id===user.id ?style.self :style.players].join(" ")
-            if(chat.playerName)console.log(chat.playerName);
           return (
             <div className={msgStyle} key={`${chat.msg_id}`}>
               <div>
                 <span  className={style.nameTag}>{chat.player_id===user.id ?"me":chat.userName}</span>
                   {chat.winner && (
-                  <div className={style.winCon}>
-                    <p>the winner: {chat.winner}</p>
-                    </div>)}
-                  <Typography paragraph>
-                    {chat.msg}
-                  </Typography>
+                    <div>
+                      <div className={style.blackCon}>
+                        <p>{chat.msg2}</p>
+                      </div>
+                      <div className={style.winCon}>
+                        <p>the winner: {chat.winner}</p>
+                      </div>
+                    </div>
+                    )}
+                  <div className={chat.winner && style.whiteCon}>
+                    <Typography paragraph>
+                      {chat.msg}
+                    </Typography>
+                  </div>
                 <span>{moment(chat.ts).format("HH:mm")}</span>
               </div>
             </div>

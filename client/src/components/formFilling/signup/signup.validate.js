@@ -4,7 +4,8 @@ export const validationSchema = yup.object().shape({
   userName: yup
     .string()
     .required("username require")
-    .matches(/^[aA1-zZ9]+$/, "only numbers and letters"),
+    .matches(/^[aA1-zZ9]+$/, "only numbers and letters")
+    .min(3, "username should be of minimum 3 characters"),
   password: yup
     .string()
     .required("password require")

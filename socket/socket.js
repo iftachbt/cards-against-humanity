@@ -5,6 +5,7 @@ import {
   changeCardStatus,
   changeJudgeTurn,
   endJudgeTurn,
+  fetchPlayerStatus,
   fetchSession,
   isRoundDone,
   isUserTurn,
@@ -41,10 +42,14 @@ const handleGameEngine = async (socket, data) => {
   if (data.type === "cardSelected") {
     await changeCardStatus("play", data.sessionId, data.cardId);
     const cards = await isRoundDone(data.sessionId);
+    const { playerStatus } = await fetchPlayerStatus(data.sessionId);
     if (cards) {
-      socket.emit("session", { type: "update", selectedCards: cards, status: data.userId });
-      socket.broadcast.emit("session", { type: "update", selectedCards: cards, status: data.userId });
-    } else socket.broadcast.emit("session", { type: "update", status: data.userId });
+      socket.emit("session", { type: "update", selectedCards: cards, status: playerStatus });
+      socket.broadcast.emit("session", { type: "update", selectedCards: cards, status: playerStatus });
+    } else {
+      socket.broadcast.emit("session", { type: "update", status: playerStatus });
+      socket.emit("session", { type: "update", status: playerStatus });
+    }
   }
   if (data.type === "winnerCard") {
     const { newBlackCard, newTurn, playersList, gameOver } = await endJudgeTurn(
@@ -53,7 +58,7 @@ const handleGameEngine = async (socket, data) => {
       data.blackCardId
     );
     const winnerPlayerName = playersList.find((player) => player.player_id === data.playerId).userName;
-    let chatList = await addMsg("admin", data.sessionId, data.cardText, winnerPlayerName);
+    let chatList = await addMsg("admin", data.sessionId, data.cardText, winnerPlayerName, data.blackCardId);
     socket.broadcast.emit("session", { type: "chatList", msg: chatList });
     socket.emit("session", { type: "chatList", msg: chatList });
     socket.broadcast.emit("session", {

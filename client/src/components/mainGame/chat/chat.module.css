@@ -27,6 +27,8 @@
   width: 96%;
   border-radius: 8px;
   overflow: auto;
+  display: flex;
+  flex-direction: column-reverse;
 }
 .messageCon::-webkit-scrollbar {
   width: 9px;
@@ -84,9 +86,6 @@
   width: 6vh;
   height: 6vh;
 }
-.textField{
-
-}
 .nameTag{
   text-decoration: underline;
   font-weight: bold;
@@ -99,13 +98,23 @@
   border-radius: 3px;
   padding: 2px;
 }
-.crownImg{
-  background-image: url("../playersList/assets/crown.png");
-  background-size: cover;
-  background-repeat: round;
+.blackCon p{
+  margin: auto;
+  background-color: #3b3a37;
+  color: #d3d3c2;
+  width: -moz-fit-content;
   width: fit-content;
-  text-align: center;
-  position: relative;
-  height: 27px;
-  right: 42px;
+  border-radius: 12px;
+  padding: 14px;
+}
+.whiteCon p{
+  margin: auto;
+  background-color: #f8f8f8;
+  width: -moz-fit-content;
+  width: fit-content;
+  max-width: 78%;
+  box-shadow: 0px 2px 8px 1px black;
+  border: solid 1px #585353;
+  border-radius: 3px;
+  padding: 10px;
 }

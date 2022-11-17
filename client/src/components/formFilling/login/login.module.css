@@ -12,6 +12,7 @@
     bottom: 0;
     top: 17vh;
     right: 0;
+    text-align: center;
     max-height: fit-content;
 }
 .container{
