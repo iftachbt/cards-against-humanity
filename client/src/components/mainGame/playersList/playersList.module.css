@@ -84,10 +84,10 @@
   display: flex;
   width: 13vh;
   max-width: 34vw;
-  justify-content: space-around;
+  justify-content: flex-start;
 }
 .status {
-
+  font-size: 0.75rem;
 }
 .wins {
   display: flex;
