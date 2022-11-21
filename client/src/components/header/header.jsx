@@ -24,8 +24,6 @@ const Header = (props) => {
   const [anchorElNav, setAnchorElNav] = useState(null)
   const [anchorElUser, setAnchorElUser] = useState(null);
 
-  useEffect(()=>console.log("header"))
-
   let pages = [];
   
   function handlePageClick(event){

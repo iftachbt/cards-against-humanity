@@ -34,7 +34,7 @@ const [state , setState]=useState(true)
   const fetchUserHandler = async () => {
     if(!user){
       const user_ = await fetchUser()
-      if(!user_ || user_ === ""||user_ === "err") console.log("no user");
+      if(!user_ || user_ === ""||user_ === "err") console.log("");
       else{
         setUser(user_)
       }

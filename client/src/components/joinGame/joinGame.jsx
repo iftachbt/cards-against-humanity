@@ -12,7 +12,6 @@ function Join(props){
   const navigate = useNavigate();
 
   const handleChange = (value, index) =>{
-    console.log("change",value.length );
     if(value.length === 6) setInputCode(value)
     else  setInputCode(false)
   }
