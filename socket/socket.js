@@ -37,7 +37,7 @@ export function connectSocket(server) {
 const handleGameEngine = async (socket, data) => {
   if (data.type === "newUser") {
     const { playersList } = await fetchSession(data.sessionId);
-    socket.broadcast.emit("session", { type: "update", playersList: playersList });
+    socket.broadcast.emit("session", { type: "update", playersList: playersList, refresh: true });
   }
   if (data.type === "cardSelected") {
     await changeCardStatus("play", data.sessionId, data.cardId);

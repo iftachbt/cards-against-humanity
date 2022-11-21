@@ -95,8 +95,9 @@ export const endJudgeTurn = async (sessionId, winningCard, blackCardId) => {
   discardPlayedCards(sessionId);
   await updateCards(statusMap.USE, sessionId, blackCardId);
   const newTurn = await changeJudgeTurn(sessionId);
-  const newBlackCard = await drawCard(sessionId, blackCardColor);
+  let newBlackCard = await drawCard(sessionId, blackCardColor);
   await addCardToPlayer(blackCardColor, sessionId, newBlackCard.id);
+  newBlackCard = await fetchBlackCard(sessionId);
   const playersList = await fetchWins(sessionId);
   const gameOver = isGameOver(playersList);
   console.log("isGameOver", gameOver);

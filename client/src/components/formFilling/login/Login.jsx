@@ -23,7 +23,7 @@ function LogIn(props){
     if(res.errMsg)return errToster(res.errMsg)
     if(res !== "err") {
       props.setUser(res);
-      navigate('/')
+      props.refreshPage()
       toster("successfully logIn")
       }
     else errToster("couldn't logIn")
