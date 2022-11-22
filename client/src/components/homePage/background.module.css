@@ -1,0 +1,32 @@
+.background span {
+  content: "\2726";
+}
+.star0{
+  position: absolute;
+  top: 211px;
+  right: 72px;
+
+}
+.star1{
+  position: absolute;
+  top: 100px;
+  right: 85%;
+
+}
+.star2{
+  position: absolute;
+  top: 70%;
+  right: 30px;
+
+}
+.star3{
+  position: absolute;
+  top: 90%;
+  right: 76%;
+
+}
+.star4{
+  position: absolute;
+  top: 64%;
+  right: 63%;
+}
