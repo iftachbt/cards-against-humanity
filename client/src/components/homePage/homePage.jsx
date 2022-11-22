@@ -1,14 +1,12 @@
-import React ,{ useEffect, useState }from "react";
+import React ,{ useState }from "react";
 import style from "./homepage.module.css"
-import {useNavigate} from "react-router-dom";
 import 'react-confirm-alert/src/react-confirm-alert.css'; 
 import { createSession } from "../../actions/gameSession/gameSession";
 import Created from "../createGame/createGame";
 import Join from "../joinGame/joinGame";
-import LogIn from "../formFilling/login/Login";
+import Background from "./background";
 
-function HomePage(props){
-  const {user} = props
+function HomePage(){
   const [join,setJoin]=useState(false)
   const [created,setCreated]=useState(false)
 
@@ -22,7 +20,9 @@ function HomePage(props){
 
   return(
     <div className={style.homePage}>
-      <div className={style.background}></div>
+      <div className={style.background}>
+      <Background />
+      </div>
       <h1 className={style.h1}>Cards Against Humanity</h1>
       {join && <Join 
       setJoin={setJoin} />}
