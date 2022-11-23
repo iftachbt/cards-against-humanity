@@ -2,7 +2,7 @@
 
 A web game as my second big project, built with React.js, node.js, JavaScript, CSS and mySql.
 
-base on the boardGame "cards Against Humanity", this web using sockets to communicate between clients, including group chat.
+base on the boardGame "cards Against Humanity", this App using sockets to communicate between clients, including group chat.
 
 
 ### Project Status - DONE
