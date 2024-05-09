@@ -21,4 +21,3 @@ To Start App:
 
 `npm run dev`  
 
-(if you want to run app on your computer, message me for the Sql schemas)
